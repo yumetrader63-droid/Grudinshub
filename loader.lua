@@ -1,89 +1,105 @@
 -- =================================================================
--- Grudins Hub Loader (UI Test Version)
+-- Grudins Hub Loader (Final Fixed Version for Delta)
 -- =================================================================
 
 local CoreGui = game:GetService("CoreGui")
+local UserInputService = game:GetService("UserInputService")
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 
-local baseURL = "https://raw.githubusercontent.com/yumetrader63-droid/Grudinshub/main/"
-local HubLogo = baseURL .. "assets/grudinslogo.png"
-
--- Hapus UI lama jika loader dijalankan ulang
+-- Hapus UI lama jika loader dijalankan ulang agar tidak menumpuk
 if CoreGui:FindFirstChild("GrudinsHubLoader") then
     CoreGui.GrudinsHubLoader:Destroy()
 end
 
--- Membuat ScreenGui utama
+-- Base URL GitHub kamu (Pastikan huruf besar/kecil 'Grudinshub' sesuai)
+local baseURL = "https://raw.githubusercontent.com/yumetrader63-droid/Grudinshub/main/"
+local HubLogoUrl = baseURL .. "assets/grudinslogo.png"
+
+-- ScreenGui Utama
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "GrudinsHubLoader"
-ScreenGui.Parent = CoreGui
-ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+ScreenGui.ResetOnSpawn = false
 
--- Membuat Kotak Utama (Responsive menggunakan UIAspectRatioConstraint atau ukuran relatif)
+-- Ambil CoreGui, fallback ke PlayerGui jika dibatasi executor
+local successUI = pcall(function()
+    ScreenGui.Parent = CoreGui
+end)
+if not successUI then
+    ScreenGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
+end
+
+-- Main Frame (Kotak Hitam-Merah Responsif)
 local MainFrame = Instance.new("Frame")
 MainFrame.Name = "MainFrame"
 MainFrame.Parent = ScreenGui
-MainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20) -- Warna Hitam Elegan
-MainFrame.BorderSizePixel = 0
+MainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15) -- Hitam Elegan
 MainFrame.Position = UDim2.new(0.5, -150, 0.5, -100)
 MainFrame.Size = UDim2.new(0, 300, 0, 200)
 MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
 
--- Efek Border/Garis Merah di pinggir kotak
+-- Border / Garis Pinggir Merah
 local UIStroke = Instance.new("UIStroke")
 UIStroke.Parent = MainFrame
-UIStroke.Color = Color3.fromRGB(220, 20, 60) -- Warna Merah
+UIStroke.Color = Color3.fromRGB(230, 30, 30) -- Merah Menyala
 UIStroke.Thickness = 2
 
 local UICorner = Instance.new("UICorner")
-UICorner.CornerRadius = UDim.new(0, 10)
+UICorner.CornerRadius = UDim.new(0, 8)
 UICorner.Parent = MainFrame
 
--- Top Bar / Judul Kotak
-local TitleLabel = Instance.new("TextLabel")
-TitleLabel.Parent = MainFrame
-TitleLabel.BackgroundColor3 = Color3.fromRGB(220, 20, 60) -- Aksen Merah
-TitleLabel.BorderSizePixel = 0
-TitleLabel.Size = UDim2.new(1, 0, 0, 40)
-TitleLabel.Font = Enum.Font.GothamBold
-TitleLabel.Text = "GRUDINS HUB"
-TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-TitleLabel.TextSize = 16
+-- Title Bar (Header)
+local TitleBar = Instance.new("Frame")
+TitleBar.Parent = MainFrame
+TitleBar.BackgroundColor3 = Color3.fromRGB(200, 25, 25)
+TitleBar.Size = UDim2.new(1, 0, 0, 35)
+TitleBar.BorderSizePixel = 0
 
 local TitleCorner = Instance.new("UICorner")
-TitleCorner.CornerRadius = UDim.new(0, 10)
-TitleCorner.Parent = TitleLabel
+TitleCorner.CornerRadius = UDim.new(0, 8)
+TitleCorner.Parent = TitleBar
 
--- Memperbaiki sudut bawah TitleBar agar rata
-local FixCorner = Instance.new("Frame")
-FixCorner.Parent = TitleLabel
-FixCorner.BackgroundColor3 = Color3.fromRGB(220, 20, 60)
-FixCorner.BorderSizePixel = 0
-FixCorner.Position = UDim2.new(0, 0, 1, -5)
-FixCorner.Size = UDim2.new(1, 0, 0, 5)
+-- Penutup sudut bawah TitleBar agar menyatu rapi
+local FixCover = Instance.new("Frame")
+FixCover.Parent = TitleBar
+FixCover.BackgroundColor3 = Color3.fromRGB(200, 25, 25)
+FixCover.Position = UDim2.new(0, 0, 1, -5)
+FixCover.Size = UDim2.new(1, 0, 0, 5)
+FixCover.BorderSizePixel = 0
 
--- Logo Image
+-- Teks Judul "GRUDINS HUB"
+local TitleText = Instance.new("TextLabel")
+TitleText.Parent = TitleBar
+TitleText.BackgroundTransparency = 1
+TitleText.Size = UDim2.new(1, 0, 1, 0)
+TitleText.Font = Enum.Font.GothamBold
+TitleText.Text = "GRUDINS HUB"
+TitleText.TextColor3 = Color3.fromRGB(255, 255, 255)
+TitleText.TextSize = 14
+
+-- Kotak Gambar Logo (ImageLabel)
 local LogoImage = Instance.new("ImageLabel")
 LogoImage.Parent = MainFrame
 LogoImage.BackgroundTransparency = 1
-LogoImage.Position = UDim2.new(0.5, -35, 0, 55)
+LogoImage.Position = UDim2.new(0.5, -35, 0, 45)
 LogoImage.Size = UDim2.new(0, 70, 0, 70)
-LogoImage.Image = HubLogo
+LogoImage.Image = HubLogoUrl
+LogoImage.ScaleType = Enum.ScaleType.Fit
 
--- Status Text di bagian bawah
-local StatusLabel = Instance.new("TextLabel")
-StatusLabel.Parent = MainFrame
-StatusLabel.BackgroundTransparency = 1
-StatusLabel.Position = UDim2.new(0, 10, 1, -45)
-StatusLabel.Size = UDim2.new(1, -20, 0, 30)
-StatusLabel.Font = Enum.Font.GothamMedium
-StatusLabel.Text = "Status: Berhasil Dimuat!"
-StatusLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
-StatusLabel.TextSize = 13
+-- Teks Status di Bagian Bawah
+local StatusText = Instance.new("TextLabel")
+StatusText.Parent = MainFrame
+StatusText.BackgroundTransparency = 1
+StatusText.Position = UDim2.new(0, 10, 1, -45)
+StatusText.Size = UDim2.new(1, -20, 0, 30)
+StatusText.Font = Enum.Font.GothamMedium
+StatusText.Text = "Status: Berhasil Dimuat!"
+StatusText.TextColor3 = Color3.fromRGB(200, 200, 200)
+StatusText.TextSize = 12
 
--- Efek Drag/Geser GUI agar bisa digerakkan di layar
+-- Fitur Dragging (Bisa digeser-geser pakai sentuhan HP di Delta)
 local dragging, dragInput, dragStart, startPos
+
 MainFrame.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
         dragging = true
@@ -103,7 +119,7 @@ MainFrame.InputChanged:Connect(function(input)
     end
 end)
 
-game:GetService("UserInputService").InputChanged:Connect(function(input)
+UserInputService.InputChanged:Connect(function(input)
     if input == dragInput and dragging then
         local delta = input.Position - dragStart
         MainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
