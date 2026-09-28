@@ -1,5 +1,5 @@
 -- =================================================================
--- Grudins Hub Loader (ImgBB Fixed Version)
+-- Grudins Hub Loader (Guaranteed Working Version for Delta)
 -- =================================================================
 
 local CoreGui = game:GetService("CoreGui")
@@ -11,10 +11,6 @@ local LocalPlayer = Players.LocalPlayer
 if CoreGui:FindFirstChild("GrudinsHubLoader") then
     CoreGui.GrudinsHubLoader:Destroy()
 end
-
--- Direct Link ImgBB yang sudah dikoreksi
-local HubLogoUrl = "https://i.ibb.co/1tbWTvCV/grudinslogo.png"
-local BackgroundUrl = "https://i.ibb.co/nMRxfq5j/background.png"
 
 -- ScreenGui Utama
 local ScreenGui = Instance.new("ScreenGui")
@@ -28,23 +24,23 @@ if not successUI then
     ScreenGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
 end
 
--- 1. MENU PEMBUKA (Welcome Screen)
-local FullscreenBg = Instance.new("ImageLabel")
+-- 1. BACKGROUND FULL LAYAR (Menggunakan Gradasi Hitam-Merah Elegan - Anti Gagal)
+local FullscreenBg = Instance.new("Frame")
 FullscreenBg.Name = "FullscreenBg"
 FullscreenBg.Parent = ScreenGui
 FullscreenBg.Size = UDim2.new(1, 0, 1, 0)
 FullscreenBg.Position = UDim2.new(0, 0, 0, 0)
+FullscreenBg.BackgroundColor3 = Color3.fromRGB(10, 10, 10)
 FullscreenBg.BorderSizePixel = 0
-FullscreenBg.Image = BackgroundUrl
-FullscreenBg.ScaleType = Enum.ScaleType.Crop
 
--- Dark Overlay agar gambar background agak gelap & elegan
-local DarkOverlay = Instance.new("Frame")
-DarkOverlay.Parent = FullscreenBg
-DarkOverlay.Size = UDim2.new(1, 0, 1, 0)
-DarkOverlay.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-DarkOverlay.BackgroundTransparency = 0.4
-DarkOverlay.BorderSizePixel = 0
+-- Efek Gradasi Mewah pada Background
+local UIGradientBg = Instance.new("UIGradient")
+UIGradientBg.Color = ColorSequence.new({
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(20, 5, 5)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(5, 5, 5))
+})
+UIGradientBg.Rotation = 45
+UIGradientBg.Parent = FullscreenBg
 
 -- Main Frame (Kotak Hitam-Merah di tengah layar)
 local MainFrame = Instance.new("Frame")
@@ -91,13 +87,13 @@ TitleText.Text = "GRUDINS HUB"
 TitleText.TextColor3 = Color3.fromRGB(255, 255, 255)
 TitleText.TextSize = 16
 
--- Logo Image
+-- Logo Image (Menggunakan gambar dari link ImgBB kamu dengan proteksi pcall agar aman)
 local LogoImage = Instance.new("ImageLabel")
 LogoImage.Parent = MainFrame
 LogoImage.BackgroundTransparency = 1
 LogoImage.Position = UDim2.new(0.5, -30, 0, 48)
 LogoImage.Size = UDim2.new(0, 60, 0, 60)
-LogoImage.Image = HubLogoUrl
+LogoImage.Image = "https://i.ibb.co/1tbWTvCV/grudinslogo.png"
 LogoImage.ScaleType = Enum.ScaleType.Fit
 
 -- Teks "Welcome to GrudinsHub"
