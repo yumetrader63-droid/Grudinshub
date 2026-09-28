@@ -1,5 +1,5 @@
 -- =================================================================
--- Grudins Hub Loader (Center Buttons with Logo Version)
+-- Grudins Hub Loader (GitHub Raw Asset Version)
 -- =================================================================
 
 local CoreGui = game:GetService("CoreGui")
@@ -12,8 +12,8 @@ if CoreGui:FindFirstChild("GrudinsHubLoader") then
     CoreGui.GrudinsHubLoader:Destroy()
 end
 
--- Asset ID Logo Roblox kamu
-local HubLogoUrl = "rbxassetid://122412612342169"
+-- Menggunakan Raw URL langsung dari GitHub repository kamu
+local HubLogoUrl = "https://raw.githubusercontent.com/yumetrader63-droid/Grudinshub/main/asset/10546.png"
 
 -- ScreenGui Utama
 local ScreenGui = Instance.new("ScreenGui")
@@ -37,7 +37,7 @@ FullscreenBg.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 FullscreenBg.BackgroundTransparency = 0.65
 FullscreenBg.BorderSizePixel = 0
 
--- Container Utama di Tengah Layar (Tanpa kotak luar, langsung isi & tombol)
+-- Container Utama di Tengah Layar
 local CenterContainer = Instance.new("Frame")
 CenterContainer.Name = "CenterContainer"
 CenterContainer.Parent = FullscreenBg
@@ -46,7 +46,7 @@ CenterContainer.Position = UDim2.new(0.5, 0, 0.5, 0)
 CenterContainer.Size = UDim2.new(0, 320, 0, 300)
 CenterContainer.AnchorPoint = Vector2.new(0.5, 0.5)
 
--- Logo Image di Tengah
+-- Logo Image menggunakan Raw GitHub URL
 local LogoImage = Instance.new("ImageLabel")
 LogoImage.Parent = CenterContainer
 LogoImage.BackgroundTransparency = 1
