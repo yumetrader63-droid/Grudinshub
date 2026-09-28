@@ -1,5 +1,5 @@
 -- =================================================================
--- Grudins Hub Loader (Guaranteed Working Version for Delta)
+-- Grudins Hub Loader (GitHub Raw Asset Version)
 -- =================================================================
 
 local CoreGui = game:GetService("CoreGui")
@@ -11,6 +11,10 @@ local LocalPlayer = Players.LocalPlayer
 if CoreGui:FindFirstChild("GrudinsHubLoader") then
     CoreGui.GrudinsHubLoader:Destroy()
 end
+
+-- Link Raw GitHub Langsung ke Folder Asset kamu
+local HubLogoUrl = "https://raw.githubusercontent.com/yumetrader63-droid/Grudinshub/main/asset/10546.png"
+local BackgroundUrl = "https://raw.githubusercontent.com/yumetrader63-droid/Grudinshub/main/asset/10548.png"
 
 -- ScreenGui Utama
 local ScreenGui = Instance.new("ScreenGui")
@@ -24,23 +28,23 @@ if not successUI then
     ScreenGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
 end
 
--- 1. BACKGROUND FULL LAYAR (Menggunakan Gradasi Hitam-Merah Elegan - Anti Gagal)
-local FullscreenBg = Instance.new("Frame")
+-- 1. MENU PEMBUKA (Welcome Screen)
+local FullscreenBg = Instance.new("ImageLabel")
 FullscreenBg.Name = "FullscreenBg"
 FullscreenBg.Parent = ScreenGui
 FullscreenBg.Size = UDim2.new(1, 0, 1, 0)
 FullscreenBg.Position = UDim2.new(0, 0, 0, 0)
-FullscreenBg.BackgroundColor3 = Color3.fromRGB(10, 10, 10)
 FullscreenBg.BorderSizePixel = 0
+FullscreenBg.Image = BackgroundUrl
+FullscreenBg.ScaleType = Enum.ScaleType.Crop
 
--- Efek Gradasi Mewah pada Background
-local UIGradientBg = Instance.new("UIGradient")
-UIGradientBg.Color = ColorSequence.new({
-    ColorSequenceKeypoint.new(0, Color3.fromRGB(20, 5, 5)),
-    ColorSequenceKeypoint.new(1, Color3.fromRGB(5, 5, 5))
-})
-UIGradientBg.Rotation = 45
-UIGradientBg.Parent = FullscreenBg
+-- Dark Overlay agar gambar background agak gelap & elegan
+local DarkOverlay = Instance.new("Frame")
+DarkOverlay.Parent = FullscreenBg
+DarkOverlay.Size = UDim2.new(1, 0, 1, 0)
+DarkOverlay.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+DarkOverlay.BackgroundTransparency = 0.4
+DarkOverlay.BorderSizePixel = 0
 
 -- Main Frame (Kotak Hitam-Merah di tengah layar)
 local MainFrame = Instance.new("Frame")
@@ -87,13 +91,13 @@ TitleText.Text = "GRUDINS HUB"
 TitleText.TextColor3 = Color3.fromRGB(255, 255, 255)
 TitleText.TextSize = 16
 
--- Logo Image (Menggunakan gambar dari link ImgBB kamu dengan proteksi pcall agar aman)
+-- Logo Image
 local LogoImage = Instance.new("ImageLabel")
 LogoImage.Parent = MainFrame
 LogoImage.BackgroundTransparency = 1
 LogoImage.Position = UDim2.new(0.5, -30, 0, 48)
 LogoImage.Size = UDim2.new(0, 60, 0, 60)
-LogoImage.Image = "https://i.ibb.co/1tbWTvCV/grudinslogo.png"
+LogoImage.Image = HubLogoUrl
 LogoImage.ScaleType = Enum.ScaleType.Fit
 
 -- Teks "Welcome to GrudinsHub"
@@ -107,7 +111,7 @@ WelcomeText.Text = "Welcome to GrudinsHub"
 WelcomeText.TextColor3 = Color3.fromRGB(220, 220, 220)
 WelcomeText.TextSize = 14
 
--- Tombol EXECUTE (Di tengah-tengah kotak)
+-- Tombol EXECUTE
 local ExecuteBtn = Instance.new("TextButton")
 ExecuteBtn.Parent = MainFrame
 ExecuteBtn.BackgroundColor3 = Color3.fromRGB(200, 25, 25)
@@ -123,7 +127,7 @@ local ExecCorner = Instance.new("UICorner")
 ExecCorner.CornerRadius = UDim.new(0, 6)
 ExecCorner.Parent = ExecuteBtn
 
--- Tombol Join Discord (Di bawah Execute, tersusun rapi di tengah)
+-- Tombol Join Discord
 local DiscordBtn = Instance.new("TextButton")
 DiscordBtn.Parent = MainFrame
 DiscordBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
@@ -144,7 +148,7 @@ DiscStroke.Parent = DiscordBtn
 DiscStroke.Color = Color3.fromRGB(200, 25, 25)
 DiscStroke.Thickness = 1
 
--- Tombol Donate (Berjajar di samping Join Discord)
+-- Tombol Donate
 local DonateBtn = Instance.new("TextButton")
 DonateBtn.Parent = MainFrame
 DonateBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
@@ -165,8 +169,7 @@ DonStroke.Parent = DonateBtn
 DonStroke.Color = Color3.fromRGB(200, 25, 25)
 DonStroke.Thickness = 1
 
-
--- 2. MENU UTAMA HUB (Disembunyikan dulu, baru muncul setelah Execute diklik)
+-- 2. MENU UTAMA HUB
 local MainHubWindow = Instance.new("Frame")
 MainHubWindow.Name = "MainHubWindow"
 MainHubWindow.Parent = ScreenGui
@@ -174,7 +177,7 @@ MainHubWindow.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 MainHubWindow.Position = UDim2.new(0.5, -175, 0.5, -125)
 MainHubWindow.Size = UDim2.new(0, 350, 0, 250)
 MainHubWindow.AnchorPoint = Vector2.new(0.5, 0.5)
-MainHubWindow.Visible = false -- Sembunyikan sebelum tombol Execute diklik!
+MainHubWindow.Visible = false
 
 local HubStroke = Instance.new("UIStroke")
 HubStroke.Parent = MainHubWindow
@@ -185,7 +188,6 @@ local HubCorner = Instance.new("UICorner")
 HubCorner.CornerRadius = UDim.new(0, 8)
 HubCorner.Parent = MainHubWindow
 
--- Header Menu Utama
 local HubHeader = Instance.new("Frame")
 HubHeader.Parent = MainHubWindow
 HubHeader.BackgroundColor3 = Color3.fromRGB(200, 25, 25)
@@ -212,7 +214,6 @@ HubTitle.Text = "GRUDINS HUB - MAIN MENU"
 HubTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
 HubTitle.TextSize = 13
 
--- Teks info di dalam Menu Utama
 local InfoText = Instance.new("TextLabel")
 InfoText.Parent = MainHubWindow
 InfoText.BackgroundTransparency = 1
@@ -223,33 +224,26 @@ InfoText.Text = "Status: Hub Berhasil Dijalankan!\nFitur game akan dimuat di sin
 InfoText.TextColor3 = Color3.fromRGB(200, 200, 200)
 InfoText.TextSize = 12
 
-
--- FUNGSI TOMBOL-TOMBOL
-
--- Tombol Execute: Menghilangkan menu welcome & memunculkan menu utama hub
+-- FUNGSI TOMBOL
 ExecuteBtn.MouseButton1Click:Connect(function()
-    FullscreenBg:Destroy() -- Hapus background & menu welcome
-    MainHubWindow.Visible = true -- Tampilkan menu utama hub
+    FullscreenBg:Destroy()
+    MainHubWindow.Visible = true
 end)
 
--- Tombol Discord
 DiscordBtn.MouseButton1Click:Connect(function()
     if setclipboard then
         setclipboard("https://discord.gg/linkdiscordmu")
         DiscordBtn.Text = "Copied!"
         task.wait(1.5)
         DiscordBtn.Text = "Join Discord"
-    else
-        print("[Grudins Hub] Discord Link: https://discord.gg/linkdiscordmu")
     end
 end)
 
--- Tombol Donate
 DonateBtn.MouseButton1Click:Connect(function()
     print("[Grudins Hub] Terima kasih sudah ingin donate!")
 end)
 
--- Fitur Dragging untuk Menu Utama Hub agar bisa digeser di layar HP
+-- Fitur Dragging
 local dragging, dragInput, dragStart, startPos
 MainHubWindow.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
