@@ -1,5 +1,5 @@
 -- =================================================================
--- Grudins Hub Loader (Final Fixed Version)
+-- Grudins Hub Loader (ImgBB Fixed Version)
 -- =================================================================
 
 local CoreGui = game:GetService("CoreGui")
@@ -12,10 +12,9 @@ if CoreGui:FindFirstChild("GrudinsHubLoader") then
     CoreGui.GrudinsHubLoader:Destroy()
 end
 
--- Base URL GitHub (Menggunakan raw.githubusercontent.com agar terbaca di Roblox/Delta)
-local baseURL = "https://raw.githubusercontent.com/yumetrader63-droid/Grudinshub/main/"
-local HubLogoUrl = baseURL .. "assets/grudinslogo.png"
-local BackgroundUrl = baseURL .. "assets/background.png"
+-- Direct Link ImgBB yang sudah dikoreksi
+local HubLogoUrl = "https://i.ibb.co/1tbWTvCV/grudinslogo.png"
+local BackgroundUrl = "https://i.ibb.co/nMRxfq5j/background.png"
 
 -- ScreenGui Utama
 local ScreenGui = Instance.new("ScreenGui")
