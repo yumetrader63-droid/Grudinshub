@@ -1,5 +1,5 @@
 -- =================================================================
--- Grudins Hub Loader (Custom Uploaded Decal Version)
+-- Grudins Hub Loader (Official Custom Decal Version)
 -- =================================================================
 
 local CoreGui = game:GetService("CoreGui")
@@ -12,7 +12,7 @@ if CoreGui:FindFirstChild("GrudinsHubLoader") then
     CoreGui.GrudinsHubLoader:Destroy()
 end
 
--- Menggunakan Asset ID Decal kamu yang baru (10548)
+-- Asset ID Decal buatan kamu yang sudah diatur publik
 local HubLogoUrl = "rbxassetid://126391784883561"
 
 -- ScreenGui Utama
@@ -46,7 +46,7 @@ CenterContainer.Position = UDim2.new(0.5, 0, 0.5, 0)
 CenterContainer.Size = UDim2.new(0, 320, 0, 300)
 CenterContainer.AnchorPoint = Vector2.new(0.5, 0.5)
 
--- Logo Image menggunakan Decal Kamu
+-- Logo Image Menggunakan Asset Decal Kamu
 local LogoImage = Instance.new("ImageLabel")
 LogoImage.Parent = CenterContainer
 LogoImage.BackgroundTransparency = 1
