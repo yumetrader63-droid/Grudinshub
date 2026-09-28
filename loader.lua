@@ -1,5 +1,5 @@
 -- =================================================================
--- Grudins Hub Loader (Clean UI Professional Version)
+-- Grudins Hub Loader (Clean UI Professional Version - Center Buttons)
 -- =================================================================
 
 local CoreGui = game:GetService("CoreGui")
@@ -11,9 +11,6 @@ local LocalPlayer = Players.LocalPlayer
 if CoreGui:FindFirstChild("GrudinsHubLoader") then
     CoreGui.GrudinsHubLoader:Destroy()
 end
-
--- Asset ID Logo kamu yang sudah di-upload sebelumnya
-local HubLogoUrl = "rbxassetid://122412612342169"
 
 -- ScreenGui Utama
 local ScreenGui = Instance.new("ScreenGui")
@@ -27,111 +24,77 @@ if not successUI then
     ScreenGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
 end
 
--- Background Gelap Semi-Transparan Full Layar (Tanpa gambar eksternal)
+-- Background Gelap Semi-Transparan Full Layar (Tanpa kotak utama, langsung tombol)
 local FullscreenBg = Instance.new("Frame")
 FullscreenBg.Name = "FullscreenBg"
 FullscreenBg.Parent = ScreenGui
 FullscreenBg.Size = UDim2.new(1, 0, 1, 0)
 FullscreenBg.Position = UDim2.new(0, 0, 0, 0)
 FullscreenBg.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-FullscreenBg.BackgroundTransparency = 0.65 -- Efek gelap transparan yang elegan
+FullscreenBg.BackgroundTransparency = 0.65 -- Efek gelap transparan elegan
 FullscreenBg.BorderSizePixel = 0
 
--- Main Frame (Kotak Menu Utama di Tengah-tengah Layar)
-local MainFrame = Instance.new("Frame")
-MainFrame.Name = "MainFrame"
-MainFrame.Parent = FullscreenBg
-MainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
-MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
-MainFrame.Size = UDim2.new(0, 380, 0, 290)
-MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+-- Container Utama di Tengah Layar (Hanya menampung teks judul & tombol-tombol)
+local CenterContainer = Instance.new("Frame")
+CenterContainer.Name = "CenterContainer"
+CenterContainer.Parent = FullscreenBg
+CenterContainer.BackgroundTransparency = 1
+CenterContainer.Position = UDim2.new(0.5, 0, 0.5, 0)
+CenterContainer.Size = UDim2.new(0, 320, 0, 260)
+CenterContainer.AnchorPoint = Vector2.new(0.5, 0.5)
 
-local UIStroke = Instance.new("UIStroke")
-UIStroke.Parent = MainFrame
-UIStroke.Color = Color3.fromRGB(230, 30, 30)
-UIStroke.Thickness = 2
-
-local UICorner = Instance.new("UICorner")
-UICorner.CornerRadius = UDim.new(0, 12)
-UICorner.Parent = MainFrame
-
--- Title Bar (Header Merah di Atas Kotak)
-local TitleBar = Instance.new("Frame")
-TitleBar.Parent = MainFrame
-TitleBar.BackgroundColor3 = Color3.fromRGB(200, 25, 25)
-TitleBar.Size = UDim2.new(1, 0, 0, 38)
-TitleBar.BorderSizePixel = 0
-
-local TitleCorner = Instance.new("UICorner")
-TitleCorner.CornerRadius = UDim.new(0, 12)
-TitleCorner.Parent = TitleBar
-
-local FixCover = Instance.new("Frame")
-FixCover.Parent = TitleBar
-FixCover.BackgroundColor3 = Color3.fromRGB(200, 25, 25)
-FixCover.Position = UDim2.new(0, 0, 1, -5)
-FixCover.Size = UDim2.new(1, 0, 0, 5)
-FixCover.BorderSizePixel = 0
-
+-- Judul / Header Grudins Hub di Tengah
 local TitleText = Instance.new("TextLabel")
-TitleText.Parent = TitleBar
+TitleText.Parent = CenterContainer
 TitleText.BackgroundTransparency = 1
-TitleText.Size = UDim2.new(1, 0, 1, 0)
+TitleText.Position = UDim2.new(0, 0, 0, 0)
+TitleText.Size = UDim2.new(1, 0, 0, 35)
 TitleText.Font = Enum.Font.GothamBold
-TitleText.Text = "GRUDINS HUB"
-TitleText.TextColor3 = Color3.fromRGB(255, 255, 255)
-TitleText.TextSize = 15
+TitleText.Text = "⚡ GRUDINS HUB"
+TitleText.TextColor3 = Color3.fromRGB(255, 50, 50)
+TitleText.TextSize = 18
 
--- Logo Image (Di dalam kotak tengah)
-local LogoImage = Instance.new("ImageLabel")
-LogoImage.Parent = MainFrame
-LogoImage.BackgroundTransparency = 1
-LogoImage.Position = UDim2.new(0.5, -25, 0, 48)
-LogoImage.Size = UDim2.new(0, 50, 0, 50)
-LogoImage.Image = HubLogoUrl
-LogoImage.ScaleType = Enum.ScaleType.Fit
-
--- Teks Sambutan
+-- Sub-teks Sambutan
 local WelcomeText = Instance.new("TextLabel")
-WelcomeText.Parent = MainFrame
+WelcomeText.Parent = CenterContainer
 WelcomeText.BackgroundTransparency = 1
-WelcomeText.Position = UDim2.new(0, 0, 0, 102)
-WelcomeText.Size = UDim2.new(1, 0, 0, 22)
+WelcomeText.Position = UDim2.new(0, 0, 0, 35)
+WelcomeText.Size = UDim2.new(1, 0, 0, 20)
 WelcomeText.Font = Enum.Font.GothamMedium
-WelcomeText.Text = "Welcome to GrudinsHub"
-WelcomeText.TextColor3 = Color3.fromRGB(220, 220, 220)
-WelcomeText.TextSize = 13
+WelcomeText.Text = "Welcome, " .. LocalPlayer.Name
+WelcomeText.TextColor3 = Color3.fromRGB(200, 200, 200)
+WelcomeText.TextSize = 12
 
--- Tombol EXECUTE (Tepat di tengah, ukuran besar)
+-- Tombol EXECUTE (Tengah, dengan Icon Play ⚡)
 local ExecuteBtn = Instance.new("TextButton")
-ExecuteBtn.Parent = MainFrame
+ExecuteBtn.Parent = CenterContainer
 ExecuteBtn.BackgroundColor3 = Color3.fromRGB(200, 25, 25)
-ExecuteBtn.Position = UDim2.new(0.5, -150, 0, 135)
-ExecuteBtn.Size = UDim2.new(0, 300, 0, 38)
+ExecuteBtn.Position = UDim2.new(0.5, -140, 0, 75)
+ExecuteBtn.Size = UDim2.new(0, 280, 0, 42)
 ExecuteBtn.Font = Enum.Font.GothamBold
-ExecuteBtn.Text = "EXECUTE"
+ExecuteBtn.Text = "  ▶  EXECUTE HUB"
 ExecuteBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 ExecuteBtn.TextSize = 14
 ExecuteBtn.AutoButtonColor = true
 
 local ExecCorner = Instance.new("UICorner")
-ExecCorner.CornerRadius = UDim.new(0, 6)
+ExecCorner.CornerRadius = UDim.new(0, 8)
 ExecCorner.Parent = ExecuteBtn
 
--- Tombol Join Discord (Di bawah Execute, tertata rapi di tengah)
+-- Tombol Join Discord (Tengah, dengan Icon Chat 💬)
 local DiscordBtn = Instance.new("TextButton")
-DiscordBtn.Parent = MainFrame
-DiscordBtn.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
-DiscordBtn.Position = UDim2.new(0.5, -150, 0, 182)
-DiscordBtn.Size = UDim2.new(0, 300, 0, 34)
+DiscordBtn.Parent = CenterContainer
+DiscordBtn.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+DiscordBtn.Position = UDim2.new(0.5, -140, 0, 127)
+DiscordBtn.Size = UDim2.new(0, 280, 0, 38)
 DiscordBtn.Font = Enum.Font.GothamMedium
-DiscordBtn.Text = "Join Discord"
+DiscordBtn.Text = "  💬  Join Discord"
 DiscordBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 DiscordBtn.TextSize = 13
 DiscordBtn.AutoButtonColor = true
 
 local DiscCorner = Instance.new("UICorner")
-DiscCorner.CornerRadius = UDim.new(0, 6)
+DiscCorner.CornerRadius = UDim.new(0, 8)
 DiscCorner.Parent = DiscordBtn
 
 local DiscStroke = Instance.new("UIStroke")
@@ -139,20 +102,20 @@ DiscStroke.Parent = DiscordBtn
 DiscStroke.Color = Color3.fromRGB(200, 25, 25)
 DiscStroke.Thickness = 1
 
--- Tombol Donate (Berjajar rapi di bawah Discord)
+-- Tombol Donate (Tengah, dengan Icon Gift 🎁)
 local DonateBtn = Instance.new("TextButton")
-DonateBtn.Parent = MainFrame
-DonateBtn.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
-DonateBtn.Position = UDim2.new(0.5, -150, 0, 226)
-DonateBtn.Size = UDim2.new(0, 300, 0, 34)
+DonateBtn.Parent = CenterContainer
+DonateBtn.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+DonateBtn.Position = UDim2.new(0.5, -140, 0, 175)
+DonateBtn.Size = UDim2.new(0, 280, 0, 38)
 DonateBtn.Font = Enum.Font.GothamMedium
-DonateBtn.Text = "Donate"
+DonateBtn.Text = "  🎁  Donate"
 DonateBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 DonateBtn.TextSize = 13
 DonateBtn.AutoButtonColor = true
 
 local DonCorner = Instance.new("UICorner")
-DonCorner.CornerRadius = UDim.new(0, 6)
+DonCorner.CornerRadius = UDim.new(0, 8)
 DonCorner.Parent = DonateBtn
 
 local DonStroke = Instance.new("UIStroke")
@@ -219,16 +182,16 @@ InfoText.TextSize = 12
 
 -- FUNGSI TOMBOL
 ExecuteBtn.MouseButton1Click:Connect(function()
-    FullscreenBg:Destroy() -- Menghilangkan menu welcome saat tombol execute ditekan
+    FullscreenBg:Destroy() -- Menghilangkan tampilan awal saat execute ditekan
     MainHubWindow.Visible = true -- Memunculkan menu utama hub
 end)
 
 DiscordBtn.MouseButton1Click:Connect(function()
     if setclipboard then
         setclipboard("https://discord.gg/linkdiscordmu")
-        DiscordBtn.Text = "Copied!"
+        DiscordBtn.Text = "  ✓  Copied to Clipboard!"
         task.wait(1.5)
-        DiscordBtn.Text = "Join Discord"
+        DiscordBtn.Text = "  💬  Join Discord"
     end
 end)
 
