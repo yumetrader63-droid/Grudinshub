@@ -1,5 +1,5 @@
 -- =================================================================
--- Grudins Hub Loader (Roblox Asset ID Version)
+-- Grudins Hub Loader (Clean & Fixed Version for Delta)
 -- =================================================================
 
 local CoreGui = game:GetService("CoreGui")
@@ -12,7 +12,7 @@ if CoreGui:FindFirstChild("GrudinsHubLoader") then
     CoreGui.GrudinsHubLoader:Destroy()
 end
 
--- Menggunakan Asset ID Roblox yang sudah kamu upload
+-- Asset ID Roblox yang sudah diupload
 local HubLogoUrl = "rbxassetid://122412612342169"
 local BackgroundUrl = "rbxassetid://126391784883561"
 
@@ -38,7 +38,7 @@ FullscreenBg.BorderSizePixel = 0
 FullscreenBg.Image = BackgroundUrl
 FullscreenBg.ScaleType = Enum.ScaleType.Crop
 
--- Dark Overlay agar gambar background agak gelap & elegan
+-- Dark Overlay
 local DarkOverlay = Instance.new("Frame")
 DarkOverlay.Parent = FullscreenBg
 DarkOverlay.Size = UDim2.new(1, 0, 1, 0)
@@ -46,7 +46,7 @@ DarkOverlay.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 DarkOverlay.BackgroundTransparency = 0.4
 DarkOverlay.BorderSizePixel = 0
 
--- Main Frame (Kotak Hitam-Merah di tengah layar)
+-- Main Frame
 local MainFrame = Instance.new("Frame")
 MainFrame.Name = "MainFrame"
 MainFrame.Parent = FullscreenBg
@@ -64,7 +64,7 @@ local UICorner = Instance.new("UICorner")
 UICorner.CornerRadius = UDim.new(0, 10)
 UICorner.Parent = MainFrame
 
--- Title Bar (Header)
+-- Title Bar
 local TitleBar = Instance.new("Frame")
 TitleBar.Parent = MainFrame
 TitleBar.BackgroundColor3 = Color3.fromRGB(200, 25, 25)
@@ -100,7 +100,7 @@ LogoImage.Size = UDim2.new(0, 60, 0, 60)
 LogoImage.Image = HubLogoUrl
 LogoImage.ScaleType = Enum.ScaleType.Fit
 
--- Teks "Welcome to GrudinsHub"
+-- Welcome Text
 local WelcomeText = Instance.new("TextLabel")
 WelcomeText.Parent = MainFrame
 WelcomeText.BackgroundTransparency = 1
@@ -127,7 +127,7 @@ local ExecCorner = Instance.new("UICorner")
 ExecCorner.CornerRadius = UDim.new(0, 6)
 ExecCorner.Parent = ExecuteBtn
 
--- Tombol Join Discord
+-- Tombol Discord
 local DiscordBtn = Instance.new("TextButton")
 DiscordBtn.Parent = MainFrame
 DiscordBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
@@ -157,7 +157,7 @@ DonateBtn.Size = UDim2.new(0, 125, 0, 32)
 DonateBtn.Font = Enum.Font.GothamMedium
 DonateBtn.Text = "Donate"
 DonateBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-DonateBtn.TextSize = 13
+DonateBtn.TextSize= 13
 DonateBtn.AutoButtonColor = true
 
 local DonCorner = Instance.new("UICorner")
@@ -168,7 +168,6 @@ local DonStroke = Instance.new("UIStroke")
 DonStroke.Parent = DonateBtn
 DonStroke.Color = Color3.fromRGB(200, 25, 25)
 DonStroke.Thickness = 1
-
 
 -- 2. MENU UTAMA HUB
 local MainHubWindow = Instance.new("Frame")
@@ -224,7 +223,6 @@ InfoText.Font = Enum.Font.GothamMedium
 InfoText.Text = "Status: Hub Berhasil Dijalankan!\nFitur game akan dimuat di sini."
 InfoText.TextColor3 = Color3.fromRGB(200, 200, 200)
 InfoText.TextSize = 12
-
 
 -- FUNGSI TOMBOL
 ExecuteBtn.MouseButton1Click:Connect(function()
