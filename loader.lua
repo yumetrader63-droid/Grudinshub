@@ -1,5 +1,5 @@
 -- =================================================================
--- Grudins Hub Loader (Final Fixed Version for Delta)
+-- Grudins Hub Loader (Complete Version with Custom Background)
 -- =================================================================
 
 local CoreGui = game:GetService("CoreGui")
@@ -7,21 +7,21 @@ local UserInputService = game:GetService("UserInputService")
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 
--- Hapus UI lama jika loader dijalankan ulang agar tidak menumpuk
+-- Hapus UI lama jika loader dijalankan ulang
 if CoreGui:FindFirstChild("GrudinsHubLoader") then
     CoreGui.GrudinsHubLoader:Destroy()
 end
 
--- Base URL GitHub kamu (Pastikan huruf besar/kecil 'Grudinshub' sesuai)
+-- Base URL GitHub kamu
 local baseURL = "https://raw.githubusercontent.com/yumetrader63-droid/Grudinshub/main/"
 local HubLogoUrl = baseURL .. "assets/grudinslogo.png"
+local BackgroundUrl = baseURL .. "assets/background.png"
 
 -- ScreenGui Utama
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "GrudinsHubLoader"
 ScreenGui.ResetOnSpawn = false
 
--- Ambil CoreGui, fallback ke PlayerGui jika dibatasi executor
 local successUI = pcall(function()
     ScreenGui.Parent = CoreGui
 end)
@@ -29,37 +29,54 @@ if not successUI then
     ScreenGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
 end
 
--- Main Frame (Kotak Hitam-Merah Responsif)
+-- Fullscreen Background (Menggunakan background.png dari folder assets)
+local FullscreenBg = Instance.new("ImageLabel")
+FullscreenBg.Name = "FullscreenBg"
+FullscreenBg.Parent = ScreenGui
+FullscreenBg.Size = UDim2.new(1, 0, 1, 0)
+FullscreenBg.Position = UDim2.new(0, 0, 0, 0)
+FullscreenBg.BorderSizePixel = 0
+FullscreenBg.Image = BackgroundUrl
+FullscreenBg.ScaleType = Enum.ScaleType.Crop
+
+-- Dark Overlay agar gambar background agak gelap dan UI lebih kontras
+local DarkOverlay = Instance.new("Frame")
+DarkOverlay.Parent = FullscreenBg
+DarkOverlay.Size = UDim2.new(1, 0, 1, 0)
+DarkOverlay.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+DarkOverlay.BackgroundTransparency = 0.4 -- Sesuaikan tingkat kegelapan (0.1 - 0.9)
+DarkOverlay.BorderSizePixel = 0
+
+-- Main Frame (Kotak Hitam-Merah di tengah layar)
 local MainFrame = Instance.new("Frame")
 MainFrame.Name = "MainFrame"
-MainFrame.Parent = ScreenGui
-MainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15) -- Hitam Elegan
-MainFrame.Position = UDim2.new(0.5, -150, 0.5, -100)
-MainFrame.Size = UDim2.new(0, 300, 0, 200)
+MainFrame.Parent = FullscreenBg
+MainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+MainFrame.Position = UDim2.new(0.5, -200, 0.5, -140)
+MainFrame.Size = UDim2.new(0, 400, 0, 280)
 MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
 
--- Border / Garis Pinggir Merah
+-- Border Merah
 local UIStroke = Instance.new("UIStroke")
 UIStroke.Parent = MainFrame
-UIStroke.Color = Color3.fromRGB(230, 30, 30) -- Merah Menyala
+UIStroke.Color = Color3.fromRGB(230, 30, 30)
 UIStroke.Thickness = 2
 
 local UICorner = Instance.new("UICorner")
-UICorner.CornerRadius = UDim.new(0, 8)
+UICorner.CornerRadius = UDim.new(0, 10)
 UICorner.Parent = MainFrame
 
 -- Title Bar (Header)
 local TitleBar = Instance.new("Frame")
 TitleBar.Parent = MainFrame
 TitleBar.BackgroundColor3 = Color3.fromRGB(200, 25, 25)
-TitleBar.Size = UDim2.new(1, 0, 0, 35)
+TitleBar.Size = UDim2.new(1, 0, 0, 40)
 TitleBar.BorderSizePixel = 0
 
 local TitleCorner = Instance.new("UICorner")
-TitleCorner.CornerRadius = UDim.new(0, 8)
+TitleCorner.CornerRadius = UDim.new(0, 10)
 TitleCorner.Parent = TitleBar
 
--- Penutup sudut bawah TitleBar agar menyatu rapi
 local FixCover = Instance.new("Frame")
 FixCover.Parent = TitleBar
 FixCover.BackgroundColor3 = Color3.fromRGB(200, 25, 25)
@@ -75,31 +92,111 @@ TitleText.Size = UDim2.new(1, 0, 1, 0)
 TitleText.Font = Enum.Font.GothamBold
 TitleText.Text = "GRUDINS HUB"
 TitleText.TextColor3 = Color3.fromRGB(255, 255, 255)
-TitleText.TextSize = 14
+TitleText.TextSize = 16
 
--- Kotak Gambar Logo (ImageLabel)
+-- Logo Image (grudinslogo.png)
 local LogoImage = Instance.new("ImageLabel")
 LogoImage.Parent = MainFrame
 LogoImage.BackgroundTransparency = 1
-LogoImage.Position = UDim2.new(0.5, -35, 0, 45)
-LogoImage.Size = UDim2.new(0, 70, 0, 70)
+LogoImage.Position = UDim2.new(0.5, -30, 0, 48)
+LogoImage.Size = UDim2.new(0, 60, 0, 60)
 LogoImage.Image = HubLogoUrl
 LogoImage.ScaleType = Enum.ScaleType.Fit
 
--- Teks Status di Bagian Bawah
-local StatusText = Instance.new("TextLabel")
-StatusText.Parent = MainFrame
-StatusText.BackgroundTransparency = 1
-StatusText.Position = UDim2.new(0, 10, 1, -45)
-StatusText.Size = UDim2.new(1, -20, 0, 30)
-StatusText.Font = Enum.Font.GothamMedium
-StatusText.Text = "Status: Berhasil Dimuat!"
-StatusText.TextColor3 = Color3.fromRGB(200, 200, 200)
-StatusText.TextSize = 12
+-- Teks "Welcome to GrudinsHub"
+local WelcomeText = Instance.new("TextLabel")
+WelcomeText.Parent = MainFrame
+WelcomeText.BackgroundTransparency = 1
+WelcomeText.Position = UDim2.new(0, 0, 0, 112)
+WelcomeText.Size = UDim2.new(1, 0, 0, 25)
+WelcomeText.Font = Enum.Font.GothamMedium
+WelcomeText.Text = "Welcome to GrudinsHub"
+WelcomeText.TextColor3 = Color3.fromRGB(220, 220, 220)
+WelcomeText.TextSize = 14
 
--- Fitur Dragging (Bisa digeser-geser pakai sentuhan HP di Delta)
+-- Tombol EXECUTE
+local ExecuteBtn = Instance.new("TextButton")
+ExecuteBtn.Parent = MainFrame
+ExecuteBtn.BackgroundColor3 = Color3.fromRGB(200, 25, 25)
+ExecuteBtn.Position = UDim2.new(0.5, -130, 0, 145)
+ExecuteBtn.Size = UDim2.new(0, 260, 0, 38)
+ExecuteBtn.Font = Enum.Font.GothamBold
+ExecuteBtn.Text = "EXECUTE"
+ExecuteBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+ExecuteBtn.TextSize = 15
+ExecuteBtn.AutoButtonColor = true
+
+local ExecCorner = Instance.new("UICorner")
+ExecCorner.CornerRadius = UDim.new(0, 6)
+ExecCorner.Parent = ExecuteBtn
+
+-- Tombol Join Discord
+local DiscordBtn = Instance.new("TextButton")
+DiscordBtn.Parent = MainFrame
+DiscordBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+DiscordBtn.Position = UDim2.new(0.5, -130, 0, 192)
+DiscordBtn.Size = UDim2.new(0, 125, 0, 32)
+DiscordBtn.Font = Enum.Font.GothamMedium
+DiscordBtn.Text = "Join Discord"
+DiscordBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+DiscordBtn.TextSize = 13
+DiscordBtn.AutoButtonColor = true
+
+local DiscCorner = Instance.new("UICorner")
+DiscCorner.CornerRadius = UDim.new(0, 6)
+DiscCorner.Parent = DiscordBtn
+
+local DiscStroke = Instance.new("UIStroke")
+DiscStroke.Parent = DiscordBtn
+DiscStroke.Color = Color3.fromRGB(200, 25, 25)
+DiscStroke.Thickness = 1
+
+-- Tombol Donate
+local DonateBtn = Instance.new("TextButton")
+DonateBtn.Parent = MainFrame
+DonateBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+DonateBtn.Position = UDim2.new(0.5, 5, 0, 192)
+DonateBtn.Size = UDim2.new(0, 125, 0, 32)
+DonateBtn.Font = Enum.Font.GothamMedium
+DonateBtn.Text = "Donate"
+DonateBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+DonateBtn.TextSize = 13
+DonateBtn.AutoButtonColor = true
+
+local DonCorner = Instance.new("UICorner")
+DonCorner.CornerRadius = UDim.new(0, 6)
+DonCorner.Parent = DonateBtn
+
+local DonStroke = Instance.new("UIStroke")
+DonStroke.Parent = DonateBtn
+DonStroke.Color = Color3.fromRGB(200, 25, 25)
+DonStroke.Thickness = 1
+
+-- Fungsi Tombol Execute (Menutup menu sambutan dan lanjut memuat script game)
+ExecuteBtn.MouseButton1Click:Connect(function()
+    FullscreenBg:Destroy()
+    print("[Grudins Hub] Executed! Memuat fitur game...")
+end)
+
+-- Fungsi Tombol Discord
+DiscordBtn.MouseButton1Click:Connect(function()
+    if setclipboard then
+        setclipboard("https://discord.gg/linkdiscordmu")
+        DiscordBtn.Text = "Copied Link!"
+        task.wait(1.5)
+        DiscordBtn.Text = "Join Discord"
+    else
+        print("[Grudins Hub] Discord: https://discord.gg/linkdiscordmu")
+    end
+end)
+
+-- Fungsi Tombol Donate
+DonateBtn.MouseButton1Click:Connect(function()
+    print("[Grudins Hub] Terima kasih sudah ingin donate!")
+end)
+
+-- Fitur Dragging Kotak Utama (Mobile Friendly untuk Delta)
 local dragging, dragInput, dragStart, startPos
-
 MainFrame.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
         dragging = true
