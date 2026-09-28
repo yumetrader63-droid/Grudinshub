@@ -1,5 +1,5 @@
 -- =================================================================
--- Grudins Hub Loader (GitHub Raw Asset Version)
+-- Grudins Hub Loader (Roblox Asset ID Version)
 -- =================================================================
 
 local CoreGui = game:GetService("CoreGui")
@@ -12,9 +12,9 @@ if CoreGui:FindFirstChild("GrudinsHubLoader") then
     CoreGui.GrudinsHubLoader:Destroy()
 end
 
--- Link Raw GitHub Langsung ke Folder Asset kamu
-local HubLogoUrl = "https://raw.githubusercontent.com/yumetrader63-droid/Grudinshub/main/asset/10546.png"
-local BackgroundUrl = "https://raw.githubusercontent.com/yumetrader63-droid/Grudinshub/main/asset/10548.png"
+-- Menggunakan Asset ID Roblox yang sudah kamu upload
+local HubLogoUrl = "rbxassetid://122412612342169"
+local BackgroundUrl = "rbxassetid://126391784883561"
 
 -- ScreenGui Utama
 local ScreenGui = Instance.new("ScreenGui")
@@ -169,6 +169,7 @@ DonStroke.Parent = DonateBtn
 DonStroke.Color = Color3.fromRGB(200, 25, 25)
 DonStroke.Thickness = 1
 
+
 -- 2. MENU UTAMA HUB
 local MainHubWindow = Instance.new("Frame")
 MainHubWindow.Name = "MainHubWindow"
@@ -223,6 +224,7 @@ InfoText.Font = Enum.Font.GothamMedium
 InfoText.Text = "Status: Hub Berhasil Dijalankan!\nFitur game akan dimuat di sini."
 InfoText.TextColor3 = Color3.fromRGB(200, 200, 200)
 InfoText.TextSize = 12
+
 
 -- FUNGSI TOMBOL
 ExecuteBtn.MouseButton1Click:Connect(function()
