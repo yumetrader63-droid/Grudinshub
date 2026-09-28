@@ -1,5 +1,5 @@
 -- =================================================================
--- Grudins Hub Loader (Fixed Assets & Hidden Main Menu until Execute)
+-- Grudins Hub Loader (Final Fixed Version)
 -- =================================================================
 
 local CoreGui = game:GetService("CoreGui")
@@ -12,7 +12,7 @@ if CoreGui:FindFirstChild("GrudinsHubLoader") then
     CoreGui.GrudinsHubLoader:Destroy()
 end
 
--- Base URL GitHub (Pastikan menggunakan raw.githubusercontent.com)
+-- Base URL GitHub (Menggunakan raw.githubusercontent.com agar terbaca di Roblox/Delta)
 local baseURL = "https://raw.githubusercontent.com/yumetrader63-droid/Grudinshub/main/"
 local HubLogoUrl = baseURL .. "assets/grudinslogo.png"
 local BackgroundUrl = baseURL .. "assets/background.png"
