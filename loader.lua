@@ -1,5 +1,5 @@
 -- =================================================================
--- Grudins Hub Loader (Clean UI Professional Version - Center Buttons)
+-- Grudins Hub Loader (Center Buttons with Logo Version)
 -- =================================================================
 
 local CoreGui = game:GetService("CoreGui")
@@ -11,6 +11,9 @@ local LocalPlayer = Players.LocalPlayer
 if CoreGui:FindFirstChild("GrudinsHubLoader") then
     CoreGui.GrudinsHubLoader:Destroy()
 end
+
+-- Asset ID Logo Roblox kamu
+local HubLogoUrl = "rbxassetid://122412612342169"
 
 -- ScreenGui Utama
 local ScreenGui = Instance.new("ScreenGui")
@@ -24,55 +27,64 @@ if not successUI then
     ScreenGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
 end
 
--- Background Gelap Semi-Transparan Full Layar (Tanpa kotak utama, langsung tombol)
+-- Background Gelap Semi-Transparan Full Layar
 local FullscreenBg = Instance.new("Frame")
 FullscreenBg.Name = "FullscreenBg"
 FullscreenBg.Parent = ScreenGui
 FullscreenBg.Size = UDim2.new(1, 0, 1, 0)
 FullscreenBg.Position = UDim2.new(0, 0, 0, 0)
 FullscreenBg.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-FullscreenBg.BackgroundTransparency = 0.65 -- Efek gelap transparan elegan
+FullscreenBg.BackgroundTransparency = 0.65
 FullscreenBg.BorderSizePixel = 0
 
--- Container Utama di Tengah Layar (Hanya menampung teks judul & tombol-tombol)
+-- Container Utama di Tengah Layar (Tanpa kotak luar, langsung isi & tombol)
 local CenterContainer = Instance.new("Frame")
 CenterContainer.Name = "CenterContainer"
 CenterContainer.Parent = FullscreenBg
 CenterContainer.BackgroundTransparency = 1
 CenterContainer.Position = UDim2.new(0.5, 0, 0.5, 0)
-CenterContainer.Size = UDim2.new(0, 320, 0, 260)
+CenterContainer.Size = UDim2.new(0, 320, 0, 300)
 CenterContainer.AnchorPoint = Vector2.new(0.5, 0.5)
 
--- Judul / Header Grudins Hub di Tengah
+-- Logo Image di Tengah
+local LogoImage = Instance.new("ImageLabel")
+LogoImage.Parent = CenterContainer
+LogoImage.BackgroundTransparency = 1
+LogoImage.Position = UDim2.new(0.5, -30, 0, 0)
+LogoImage.Size = UDim2.new(0, 60, 0, 60)
+LogoImage.Image = HubLogoUrl
+LogoImage.ScaleType = Enum.ScaleType.Fit
+
+-- Judul Grudins Hub
 local TitleText = Instance.new("TextLabel")
 TitleText.Parent = CenterContainer
 TitleText.BackgroundTransparency = 1
-TitleText.Position = UDim2.new(0, 0, 0, 0)
-TitleText.Size = UDim2.new(1, 0, 0, 35)
+TitleText.Position = UDim2.new(0, 0, 0, 65)
+TitleText.Size = UDim2.new(1, 0, 0, 30)
 TitleText.Font = Enum.Font.GothamBold
-TitleText.Text = "⚡ GRUDINS HUB"
+TitleText.Text = "GRUDINS HUB"
 TitleText.TextColor3 = Color3.fromRGB(255, 50, 50)
-TitleText.TextSize = 18
+TitleText.TextSize = 16
 
 -- Sub-teks Sambutan
 local WelcomeText = Instance.new("TextLabel")
 WelcomeText.Parent = CenterContainer
 WelcomeText.BackgroundTransparency = 1
-WelcomeText.Position = UDim2.new(0, 0, 0, 35)
+WelcomeText.Position = UDim2.new(0, 0, 0, 95)
 WelcomeText.Size = UDim2.new(1, 0, 0, 20)
 WelcomeText.Font = Enum.Font.GothamMedium
 WelcomeText.Text = "Welcome, " .. LocalPlayer.Name
 WelcomeText.TextColor3 = Color3.fromRGB(200, 200, 200)
 WelcomeText.TextSize = 12
 
--- Tombol EXECUTE (Tengah, dengan Icon Play ⚡)
+-- Tombol EXECUTE
 local ExecuteBtn = Instance.new("TextButton")
 ExecuteBtn.Parent = CenterContainer
 ExecuteBtn.BackgroundColor3 = Color3.fromRGB(200, 25, 25)
-ExecuteBtn.Position = UDim2.new(0.5, -140, 0, 75)
+ExecuteBtn.Position = UDim2.new(0.5, -140, 0, 130)
 ExecuteBtn.Size = UDim2.new(0, 280, 0, 42)
 ExecuteBtn.Font = Enum.Font.GothamBold
-ExecuteBtn.Text = "  ▶  EXECUTE HUB"
+ExecuteBtn.Text = "EXECUTE"
 ExecuteBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 ExecuteBtn.TextSize = 14
 ExecuteBtn.AutoButtonColor = true
@@ -81,14 +93,14 @@ local ExecCorner = Instance.new("UICorner")
 ExecCorner.CornerRadius = UDim.new(0, 8)
 ExecCorner.Parent = ExecuteBtn
 
--- Tombol Join Discord (Tengah, dengan Icon Chat 💬)
+-- Tombol Join Discord
 local DiscordBtn = Instance.new("TextButton")
 DiscordBtn.Parent = CenterContainer
 DiscordBtn.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-DiscordBtn.Position = UDim2.new(0.5, -140, 0, 127)
+DiscordBtn.Position = UDim2.new(0.5, -140, 0, 182)
 DiscordBtn.Size = UDim2.new(0, 280, 0, 38)
 DiscordBtn.Font = Enum.Font.GothamMedium
-DiscordBtn.Text = "  💬  Join Discord"
+DiscordBtn.Text = "Join Discord"
 DiscordBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 DiscordBtn.TextSize = 13
 DiscordBtn.AutoButtonColor = true
@@ -102,14 +114,14 @@ DiscStroke.Parent = DiscordBtn
 DiscStroke.Color = Color3.fromRGB(200, 25, 25)
 DiscStroke.Thickness = 1
 
--- Tombol Donate (Tengah, dengan Icon Gift 🎁)
+-- Tombol Donate
 local DonateBtn = Instance.new("TextButton")
 DonateBtn.Parent = CenterContainer
 DonateBtn.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-DonateBtn.Position = UDim2.new(0.5, -140, 0, 175)
+DonateBtn.Position = UDim2.new(0.5, -140, 0, 230)
 DonateBtn.Size = UDim2.new(0, 280, 0, 38)
 DonateBtn.Font = Enum.Font.GothamMedium
-DonateBtn.Text = "  🎁  Donate"
+DonateBtn.Text = "Donate"
 DonateBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 DonateBtn.TextSize = 13
 DonateBtn.AutoButtonColor = true
@@ -182,16 +194,16 @@ InfoText.TextSize = 12
 
 -- FUNGSI TOMBOL
 ExecuteBtn.MouseButton1Click:Connect(function()
-    FullscreenBg:Destroy() -- Menghilangkan tampilan awal saat execute ditekan
-    MainHubWindow.Visible = true -- Memunculkan menu utama hub
+    FullscreenBg:Destroy()
+    MainHubWindow.Visible = true
 end)
 
 DiscordBtn.MouseButton1Click:Connect(function()
     if setclipboard then
         setclipboard("https://discord.gg/linkdiscordmu")
-        DiscordBtn.Text = "  ✓  Copied to Clipboard!"
+        DiscordBtn.Text = "Copied!"
         task.wait(1.5)
-        DiscordBtn.Text = "  💬  Join Discord"
+        DiscordBtn.Text = "Join Discord"
     end
 end)
 
@@ -199,7 +211,7 @@ DonateBtn.MouseButton1Click:Connect(function()
     print("[Grudins Hub] Terima kasih sudah ingin donate!")
 end)
 
--- Fitur Dragging untuk Menu Utama Hub agar bisa digeser di layar HP
+-- Fitur Dragging Menu Utama
 local dragging, dragInput, dragStart, startPos
 MainHubWindow.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
