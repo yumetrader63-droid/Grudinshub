@@ -1,5 +1,5 @@
 -- =================================================================
--- Grudins Hub - Universal Script (Fixed Minimize/Restore Position)
+-- Grudins Hub - Universal Script (Fixed Drag & Minimize Position)
 -- =================================================================
 
 local CoreGui = game:GetService("CoreGui")
@@ -36,10 +36,9 @@ local MainFrame = Instance.new("Frame")
 MainFrame.Name = "MainFrame"
 MainFrame.Parent = ScreenGui
 MainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
--- Posisi awal pas di tengah layar (AnchorPoint 0.5, 0.5)
-MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
+-- Menggunakan Scale (0.5, 0.5) agar pas di tengah layar tanpaAnchorPoint ribet
+MainFrame.Position = UDim2.new(0.5, -175, 0.5, -130)
 MainFrame.Size = UDim2.new(0, 350, 0, 260)
-MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
 MainFrame.Visible = true
 MainFrame.ZIndex = 10
 
@@ -155,7 +154,6 @@ local MinimizedIcon = Instance.new("ImageButton")
 MinimizedIcon.Name = "MinimizedIcon"
 MinimizedIcon.Parent = ScreenGui
 MinimizedIcon.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
--- Posisi awal ikon minimize di pojok kiri atas/tengah agar aman
 MinimizedIcon.Position = UDim2.new(0.05, 0, 0.15, 0)
 MinimizedIcon.Size = UDim2.new(0, 50, 0, 50)
 MinimizedIcon.Visible = false
@@ -163,7 +161,7 @@ MinimizedIcon.AutoButtonColor = false
 MinimizedIcon.ZIndex = 30
 
 local IconCorner = Instance.new("UICorner")
-IconCorner.CornerRadius = UDim.new(1, 0) -- Lingkaran penuh
+IconCorner.CornerRadius = UDim.new(1, 0)
 IconCorner.Parent = MinimizedIcon
 
 local IconStroke = Instance.new("UIStroke")
@@ -171,7 +169,6 @@ IconStroke.Parent = MinimizedIcon
 IconStroke.Color = Color3.fromRGB(255, 50, 50)
 IconStroke.Thickness = 2
 
--- Gambar Logo di Dalam Lingkaran
 local IconLogo = Instance.new("ImageLabel")
 IconLogo.Parent = MinimizedIcon
 IconLogo.BackgroundTransparency = 1
@@ -183,17 +180,14 @@ IconLogo.ZIndex = 31
 
 
 -- =================================================================
--- 3. FUNGSI MINIMIZE & RESTORE (Tanpa Geser Otomatis yang Rusak)
+-- 3. FUNGSI MINIMIZE & RESTORE (Aman & Tidak Bergeser)
 -- =================================================================
 MinimizeBtn.MouseButton1Click:Connect(function()
-    -- Sembunyikan menu utama, tampilkan ikon lingkaran
     MainFrame.Visible = false
     MinimizedIcon.Visible = true
 end)
 
 MinimizedIcon.MouseButton1Click:Connect(function()
-    -- Sembunyikan ikon lingkaran, tampilkan kembali menu utama
-    -- (Posisi MainFrame tidak diubah secara paksa agar tetap diam/stabil di tempatnya)
     MinimizedIcon.Visible = false
     MainFrame.Visible = true
 end)
@@ -204,21 +198,16 @@ end)
 
 
 -- =================================================================
--- 4. SISTEM DRAGGING (Hanya Bergeser Saat Ditarik Manual)
+-- 4. SISTEM DRAGGING YANG STABIL
 -- =================================================================
-local function makeDraggable(frame, dragHandle)
+local function makeDraggable(frame)
     local dragging = false
     local dragInput, dragStart, startPos
 
-    dragHandle.InputBegan:Connect(function(input)
+    frame.InputBegan:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
             dragging = true
             dragStart = input.Position
-            
-            -- Ubah AnchorPoint sementara ke (0,0) agar perhitungan geser manual akurat
-            frame.AnchorPoint = Vector2.new(0, 0)
-            frame.Position = UDim2.new(0, frame.AbsolutePosition.X, 0, frame.AbsolutePosition.Y)
-            
             startPos = frame.Position
 
             input.Changed:Connect(function()
@@ -242,8 +231,8 @@ local function makeDraggable(frame, dragHandle)
     end)
 end
 
--- Terapkan fungsi drag (hanya aktif saat ditarik manual)
-makeDraggable(MainFrame, TopBar)
-makeDraggable(MinimizedIcon, MinimizedIcon)
+-- Terapkan drag pada TopBar untuk MainFrame, dan langsung ke MinimizedIcon
+makeDraggable(MainFrame)
+makeDraggable(MinimizedIcon)
 
-print("[Grudins Hub] Universal script (Fixed Position) berhasil dimuat!")
+print("[Grudins Hub] Universal script stabil berhasil dimuat!")
