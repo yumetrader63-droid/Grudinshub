@@ -1,9 +1,10 @@
 -- =================================================================
--- Grudins Hub Loader (Full Screen Inset Fixed Version)
+-- Grudins Hub Loader (Clean, Dark Animated Buttons, No Logo)
 -- =================================================================
 
 local CoreGui = game:GetService("CoreGui")
 local UserInputService = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 
@@ -12,16 +13,15 @@ if CoreGui:FindFirstChild("GrudinsHubLoader") then
     CoreGui.GrudinsHubLoader:Destroy()
 end
 
--- Asset ID Logo & Background Kustom Kamu
-local HubLogoUrl = "rbxassetid://134447790437387"
+-- Asset ID Background Kustom Kamu
 local HubBgUrl = "rbxassetid://76695249700487"
 
 -- ScreenGui Utama
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "GrudinsHubLoader"
 ScreenGui.ResetOnSpawn = false
--- BARU: Mengabaikan batas atas (Topbar/Inset) agar background menutup full layar
 ScreenGui.IgnoreGuiInset = true
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
 local successUI = pcall(function()
     ScreenGui.Parent = CoreGui
@@ -30,123 +30,121 @@ if not successUI then
     ScreenGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
 end
 
--- Background Gambar Kustom Full Layar
+-- Background Gambar Kustom Full Layar Mutlak
 local FullscreenBg = Instance.new("ImageLabel")
 FullscreenBg.Name = "FullscreenBg"
 FullscreenBg.Parent = ScreenGui
-FullscreenBg.Size = UDim2.new(1, 0, 1, 0)
+FullscreenBg.AnchorPoint = Vector2.new(0, 0)
 FullscreenBg.Position = UDim2.new(0, 0, 0, 0)
+FullscreenBg.Size = UDim2.new(1, 0, 1, 0)
 FullscreenBg.Image = HubBgUrl
 FullscreenBg.ScaleType = Enum.ScaleType.Crop
 FullscreenBg.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 FullscreenBg.BorderSizePixel = 0
+FullscreenBg.ZIndex = 0
 
--- Overlay Gelap Semi-Transparan di atas Background agar UI tetap jelas dibaca
+-- Overlay Gelap Semi-Transparan di atas Background
 local DarkOverlay = Instance.new("Frame")
 DarkOverlay.Name = "DarkOverlay"
 DarkOverlay.Parent = FullscreenBg
+DarkOverlay.AnchorPoint = Vector2.new(0, 0)
+DarkOverlay.Position = UDim2.new(0, 0, 0, 0)
 DarkOverlay.Size = UDim2.new(1, 0, 1, 0)
 DarkOverlay.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 DarkOverlay.BackgroundTransparency = 0.55
 DarkOverlay.BorderSizePixel = 0
+DarkOverlay.ZIndex = 1
 
--- Container Utama di Tengah Layar
+-- Container Utama di Tengah Layar (Tanpa Logo, Lebih Rapi)
 local CenterContainer = Instance.new("Frame")
 CenterContainer.Name = "CenterContainer"
 CenterContainer.Parent = FullscreenBg
 CenterContainer.BackgroundTransparency = 1
 CenterContainer.Position = UDim2.new(0.5, 0, 0.5, 0)
-CenterContainer.Size = UDim2.new(0, 320, 0, 300)
+CenterContainer.Size = UDim2.new(0, 320, 0, 260)
 CenterContainer.AnchorPoint = Vector2.new(0.5, 0.5)
-
--- Logo Image Menggunakan Texture ID Kamu
-local LogoImage = Instance.new("ImageLabel")
-LogoImage.Parent = CenterContainer
-LogoImage.BackgroundTransparency = 1
-LogoImage.Position = UDim2.new(0.5, -30, 0, 0)
-LogoImage.Size = UDim2.new(0, 60, 0, 60)
-LogoImage.Image = HubLogoUrl
-LogoImage.ScaleType = Enum.ScaleType.Fit
+CenterContainer.ZIndex = 2
 
 -- Judul Grudins Hub
 local TitleText = Instance.new("TextLabel")
 TitleText.Parent = CenterContainer
 TitleText.BackgroundTransparency = 1
-TitleText.Position = UDim2.new(0, 0, 0, 65)
-TitleText.Size = UDim2.new(1, 0, 0, 30)
+TitleText.Position = UDim2.new(0, 0, 0, 10)
+TitleText.Size = UDim2.new(1, 0, 0, 35)
 TitleText.Font = Enum.Font.GothamBold
 TitleText.Text = "GRUDINS HUB"
 TitleText.TextColor3 = Color3.fromRGB(255, 50, 50)
-TitleText.TextSize = 16
+TitleText.TextSize = 20
+TitleText.ZIndex = 2
 
 -- Sub-teks Sambutan
 local WelcomeText = Instance.new("TextLabel")
 WelcomeText.Parent = CenterContainer
 WelcomeText.BackgroundTransparency = 1
-WelcomeText.Position = UDim2.new(0, 0, 0, 95)
+WelcomeText.Position = UDim2.new(0, 0, 0, 45)
 WelcomeText.Size = UDim2.new(1, 0, 0, 20)
 WelcomeText.Font = Enum.Font.GothamMedium
 WelcomeText.Text = "Welcome, " .. LocalPlayer.Name
 WelcomeText.TextColor3 = Color3.fromRGB(200, 200, 200)
-WelcomeText.TextSize = 12
+WelcomeText.TextSize = 13
+WelcomeText.ZIndex = 2
 
--- Tombol EXECUTE
-local ExecuteBtn = Instance.new("TextButton")
-ExecuteBtn.Parent = CenterContainer
-ExecuteBtn.BackgroundColor3 = Color3.fromRGB(200, 25, 25)
-ExecuteBtn.Position = UDim2.new(0.5, -140, 0, 130)
-ExecuteBtn.Size = UDim2.new(0, 280, 0, 42)
-ExecuteBtn.Font = Enum.Font.GothamBold
-ExecuteBtn.Text = "EXECUTE"
-ExecuteBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-ExecuteBtn.TextSize = 14
-ExecuteBtn.AutoButtonColor = true
+-- Fungsi Pembuat Tombol Hitam Elegan dengan Animasi
+local function createButton(name, text, yPos)
+    local btn = Instance.new("TextButton")
+    btn.Name = name
+    btn.Parent = CenterContainer
+    btn.BackgroundColor3 = Color3.fromRGB(15, 15, 15) -- Hitam Elegan
+    btn.Position = UDim2.new(0.5, -140, 0, yPos)
+    btn.Size = UDim2.new(0, 280, 0, 42)
+    btn.Font = Enum.Font.GothamBold
+    btn.Text = text
+    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    btn.TextSize = 14
+    btn.AutoButtonColor = false
+    btn.ZIndex = 3
 
-local ExecCorner = Instance.new("UICorner")
-ExecCorner.CornerRadius = UDim.new(0, 8)
-ExecCorner.Parent = ExecuteBtn
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, 8)
+    corner.Parent = btn
 
--- Tombol Join Discord
-local DiscordBtn = Instance.new("TextButton")
-DiscordBtn.Parent = CenterContainer
-DiscordBtn.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-DiscordBtn.Position = UDim2.new(0.5, -140, 0, 182)
-DiscordBtn.Size = UDim2.new(0, 280, 0, 38)
-DiscordBtn.Font = Enum.Font.GothamMedium
-DiscordBtn.Text = "Join Discord"
-DiscordBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-DiscordBtn.TextSize = 13
-DiscordBtn.AutoButtonColor = true
+    local stroke = Instance.new("UIStroke")
+    stroke.Parent = btn
+    stroke.Color = Color3.fromRGB(200, 25, 25)
+    stroke.Thickness = 1.5
 
-local DiscCorner = Instance.new("UICorner")
-DiscCorner.CornerRadius = UDim.new(0, 8)
-DiscCorner.Parent = DiscordBtn
+    -- Efek Animasi Tombol saat Disentuh/Ditekan
+    btn.MouseButton1Down:Connect(function()
+        TweenService:Create(btn, TweenInfo.new(0.1), {
+            BackgroundColor3 = Color3.fromRGB(40, 40, 40),
+            Size = UDim2.new(0, 270, 0, 39),
+            Position = UDim2.new(0.5, -135, 0, yPos + 1.5)
+        }):Play()
+    end)
 
-local DiscStroke = Instance.new("UIStroke")
-DiscStroke.Parent = DiscordBtn
-DiscStroke.Color = Color3.fromRGB(200, 25, 25)
-DiscStroke.Thickness = 1
+    btn.MouseButton1Up:Connect(function()
+        TweenService:Create(btn, TweenInfo.new(0.1), {
+            BackgroundColor3 = Color3.fromRGB(15, 15, 15),
+            Size = UDim2.new(0, 280, 0, 42),
+            Position = UDim2.new(0.5, -140, 0, yPos)
+        }):Play()
+    end)
 
--- Tombol Donate
-local DonateBtn = Instance.new("TextButton")
-DonateBtn.Parent = CenterContainer
-DonateBtn.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-DonateBtn.Position = UDim2.new(0.5, -140, 0, 230)
-DonateBtn.Size = UDim2.new(0, 280, 0, 38)
-DonateBtn.Font = Enum.Font.GothamMedium
-DonateBtn.Text = "Donate"
-DonateBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-DonateBtn.TextSize = 13
-DonateBtn.AutoButtonColor = true
+    btn.MouseLeave:Connect(function()
+        TweenService:Create(btn, TweenInfo.new(0.1), {
+            BackgroundColor3 = Color3.fromRGB(15, 15, 15),
+            Size = UDim2.new(0, 280, 0, 42),
+            Position = UDim2.new(0.5, -140, 0, yPos)
+        }):Play()
+    end)
 
-local DonCorner = Instance.new("UICorner")
-DonCorner.CornerRadius = UDim.new(0, 8)
-DonCorner.Parent = DonateBtn
+    return btn
+end
 
-local DonStroke = Instance.new("UIStroke")
-DonStroke.Parent = DonateBtn
-DonStroke.Color = Color3.fromRGB(200, 25, 25)
-DonStroke.Thickness = 1
+-- Buat Tombol-tombol dengan Tema Hitam & Animasi
+local ExecuteBtn = createButton("ExecuteBtn", "EXECUTE", 90)
+local DiscordBtn = createButton("DiscordBtn", "Join Discord", 145)
+local DonateBtn = createButton("DonateBtn", "Donate", 200)
 
 
 -- 2. MENU UTAMA HUB (Tersembunyi sebelum tombol Execute ditekan)
@@ -158,6 +156,7 @@ MainHubWindow.Position = UDim2.new(0.5, -175, 0.5, -125)
 MainHubWindow.Size = UDim2.new(0, 350, 0, 250)
 MainHubWindow.AnchorPoint = Vector2.new(0.5, 0.5)
 MainHubWindow.Visible = false
+MainHubWindow.ZIndex = 10
 
 local HubStroke = Instance.new("UIStroke")
 HubStroke.Parent = MainHubWindow
@@ -205,7 +204,7 @@ InfoText.TextColor3 = Color3.fromRGB(200, 200, 200)
 InfoText.TextSize = 12
 
 
--- FUNGSI TOMBOL
+-- FUNGSI TOMBOL AKSI
 ExecuteBtn.MouseButton1Click:Connect(function()
     FullscreenBg:Destroy()
     MainHubWindow.Visible = true
