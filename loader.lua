@@ -1,5 +1,5 @@
 -- =================================================================
--- Grudins Hub Loader (Official Custom Decal Version)
+-- Grudins Hub Loader (Custom Logo & Custom Background Version)
 -- =================================================================
 
 local CoreGui = game:GetService("CoreGui")
@@ -12,8 +12,9 @@ if CoreGui:FindFirstChild("GrudinsHubLoader") then
     CoreGui.GrudinsHubLoader:Destroy()
 end
 
--- Asset ID Decal buatan kamu yang sudah diatur publik
-local HubLogoUrl = "rbxassetid://126391784883561"
+-- Asset ID Logo & Background Kustom Kamu
+local HubLogoUrl = "rbxassetid://134447790437387"
+local HubBgUrl = "rbxassetid://76695249700487"
 
 -- ScreenGui Utama
 local ScreenGui = Instance.new("ScreenGui")
@@ -27,15 +28,25 @@ if not successUI then
     ScreenGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
 end
 
--- Background Gelap Semi-Transparan Full Layar
-local FullscreenBg = Instance.new("Frame")
+-- Background Gambar Kustom Full Layar
+local FullscreenBg = Instance.new("ImageLabel")
 FullscreenBg.Name = "FullscreenBg"
 FullscreenBg.Parent = ScreenGui
 FullscreenBg.Size = UDim2.new(1, 0, 1, 0)
 FullscreenBg.Position = UDim2.new(0, 0, 0, 0)
+FullscreenBg.Image = HubBgUrl
+FullscreenBg.ScaleType = Enum.ScaleType.Crop
 FullscreenBg.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-FullscreenBg.BackgroundTransparency = 0.65
 FullscreenBg.BorderSizePixel = 0
+
+-- Overlay Gelap Semi-Transparan di atas Background agar UI tetap jelas dibaca
+local DarkOverlay = Instance.new("Frame")
+DarkOverlay.Name = "DarkOverlay"
+DarkOverlay.Parent = FullscreenBg
+DarkOverlay.Size = UDim2.new(1, 0, 1, 0)
+DarkOverlay.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+DarkOverlay.BackgroundTransparency = 0.55
+DarkOverlay.BorderSizePixel = 0
 
 -- Container Utama di Tengah Layar
 local CenterContainer = Instance.new("Frame")
@@ -46,7 +57,7 @@ CenterContainer.Position = UDim2.new(0.5, 0, 0.5, 0)
 CenterContainer.Size = UDim2.new(0, 320, 0, 300)
 CenterContainer.AnchorPoint = Vector2.new(0.5, 0.5)
 
--- Logo Image Menggunakan Asset Decal Kamu
+-- Logo Image Menggunakan Texture ID Kamu
 local LogoImage = Instance.new("ImageLabel")
 LogoImage.Parent = CenterContainer
 LogoImage.BackgroundTransparency = 1
