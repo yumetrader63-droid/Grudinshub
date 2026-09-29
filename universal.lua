@@ -1,5 +1,5 @@
 -- =================================================================
--- Grudins Hub - Universal Script (Floating & Minimizable with Logo)
+-- Grudins Hub - Universal Script (Fixed Minimize/Restore Position)
 -- =================================================================
 
 local CoreGui = game:GetService("CoreGui")
@@ -36,7 +36,8 @@ local MainFrame = Instance.new("Frame")
 MainFrame.Name = "MainFrame"
 MainFrame.Parent = ScreenGui
 MainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
-MainFrame.Position = UDim2.new(0.5, -175, 0.5, -130)
+-- Posisi awal pas di tengah layar (AnchorPoint 0.5, 0.5)
+MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
 MainFrame.Size = UDim2.new(0, 350, 0, 260)
 MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
 MainFrame.Visible = true
@@ -154,19 +155,20 @@ local MinimizedIcon = Instance.new("ImageButton")
 MinimizedIcon.Name = "MinimizedIcon"
 MinimizedIcon.Parent = ScreenGui
 MinimizedIcon.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
-MinimizedIcon.Position = UDim2.new(0.1, 0, 0.2, 0) -- Posisi awal saat di-minimize
+-- Posisi awal ikon minimize di pojok kiri atas/tengah agar aman
+MinimizedIcon.Position = UDim2.new(0.05, 0, 0.15, 0)
 MinimizedIcon.Size = UDim2.new(0, 50, 0, 50)
 MinimizedIcon.Visible = false
 MinimizedIcon.AutoButtonColor = false
 MinimizedIcon.ZIndex = 30
 
 local IconCorner = Instance.new("UICorner")
-IconCorner.CornerRadius = UDim.new(1, 0) -- Membuatnya jadi lingkaran penuh
+IconCorner.CornerRadius = UDim.new(1, 0) -- Lingkaran penuh
 IconCorner.Parent = MinimizedIcon
 
 local IconStroke = Instance.new("UIStroke")
 IconStroke.Parent = MinimizedIcon
-IconStroke.Color = Color3.fromRGB(255, 50, 50) -- Border merah menyala estetik
+IconStroke.Color = Color3.fromRGB(255, 50, 50)
 IconStroke.Thickness = 2
 
 -- Gambar Logo di Dalam Lingkaran
@@ -181,20 +183,17 @@ IconLogo.ZIndex = 31
 
 
 -- =================================================================
--- 3. FUNGSI MINIMIZE & RESTORE (Buka / Tutup UI)
+-- 3. FUNGSI MINIMIZE & RESTORE (Tanpa Geser Otomatis yang Rusak)
 -- =================================================================
 MinimizeBtn.MouseButton1Click:Connect(function()
-    -- Simpan posisi terakhir MainFrame ke MinimizedIcon sebelum disembunyikan
-    MinimizedIcon.Position = UDim2.new(0, MainFrame.AbsolutePosition.X, 0, MainFrame.AbsolutePosition.Y)
-    
+    -- Sembunyikan menu utama, tampilkan ikon lingkaran
     MainFrame.Visible = false
     MinimizedIcon.Visible = true
 end)
 
 MinimizedIcon.MouseButton1Click:Connect(function()
-    -- Posisikan kembali MainFrame sesuai letak ikon lingkaran terakhir
-    MainFrame.Position = UDim2.new(0, MinimizedIcon.AbsolutePosition.X, 0, MinimizedIcon.AbsolutePosition.Y)
-    
+    -- Sembunyikan ikon lingkaran, tampilkan kembali menu utama
+    -- (Posisi MainFrame tidak diubah secara paksa agar tetap diam/stabil di tempatnya)
     MinimizedIcon.Visible = false
     MainFrame.Visible = true
 end)
@@ -205,7 +204,7 @@ end)
 
 
 -- =================================================================
--- 4. SISTEM DRAGGING (Bisa Digeser di Layar HP / PC)
+-- 4. SISTEM DRAGGING (Hanya Bergeser Saat Ditarik Manual)
 -- =================================================================
 local function makeDraggable(frame, dragHandle)
     local dragging = false
@@ -215,6 +214,11 @@ local function makeDraggable(frame, dragHandle)
         if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
             dragging = true
             dragStart = input.Position
+            
+            -- Ubah AnchorPoint sementara ke (0,0) agar perhitungan geser manual akurat
+            frame.AnchorPoint = Vector2.new(0, 0)
+            frame.Position = UDim2.new(0, frame.AbsolutePosition.X, 0, frame.AbsolutePosition.Y)
+            
             startPos = frame.Position
 
             input.Changed:Connect(function()
@@ -238,8 +242,8 @@ local function makeDraggable(frame, dragHandle)
     end)
 end
 
--- Terapkan fungsi drag ke MainFrame (lewat TopBar) dan ke MinimizedIcon (lingkaran)
+-- Terapkan fungsi drag (hanya aktif saat ditarik manual)
 makeDraggable(MainFrame, TopBar)
 makeDraggable(MinimizedIcon, MinimizedIcon)
 
-print("[Grudins Hub] Universal script (Floating & Minimizable) berhasil dimuat!")
+print("[Grudins Hub] Universal script (Fixed Position) berhasil dimuat!")
