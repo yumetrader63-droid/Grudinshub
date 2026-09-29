@@ -1,5 +1,5 @@
 -- =================================================================
--- Grudins Hub Loader (Modern Icons Version)
+-- Grudins Hub Loader (Fixed Button Text & Clean Version)
 -- =================================================================
 
 local CoreGui = game:GetService("CoreGui")
@@ -89,7 +89,7 @@ WelcomeText.TextColor3 = Color3.fromRGB(200, 200, 200)
 WelcomeText.TextSize = 13
 WelcomeText.ZIndex = 2
 
--- Tombol EXECUTE (Full Lebar, Hitam, Teks Putih Bersih)
+-- Tombol EXECUTE (Diperbaiki Ukuran Teks & Ketebalan Border agar Jelas Terbaca)
 local ExecuteBtn = Instance.new("TextButton")
 ExecuteBtn.Name = "ExecuteBtn"
 ExecuteBtn.Parent = CenterContainer
@@ -97,9 +97,9 @@ ExecuteBtn.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
 ExecuteBtn.Position = UDim2.new(0.5, -140, 0, 85)
 ExecuteBtn.Size = UDim2.new(0, 280, 0, 42)
 ExecuteBtn.Font = Enum.Font.GothamBold
-ExecuteBtn.Text = "  EXECUTE"
+ExecuteBtn.Text = "EXECUTE"
 ExecuteBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-ExecuteBtn.TextSize = 14
+ExecuteBtn.TextSize = 13 -- Disesuaikan agar pas dan tidak bertumpuk
 ExecuteBtn.AutoButtonColor = false
 ExecuteBtn.ZIndex = 3
 
@@ -109,17 +109,8 @@ ExecCorner.Parent = ExecuteBtn
 
 local ExecStroke = Instance.new("UIStroke")
 ExecStroke.Parent = ExecuteBtn
-ExecStroke.Color = Color3.fromRGB(200, 25, 25)
-ExecStroke.Thickness = 1.5
-
--- Ikon Modern untuk Execute (Ikon Play / Power Elegan)
-local ExecIcon = Instance.new("ImageLabel")
-ExecIcon.Parent = ExecuteBtn
-ExecIcon.BackgroundTransparency = 1
-ExecIcon.Position = UDim2.new(0, 15, 0.5, -10)
-ExecIcon.Size = UDim2.new(0, 20, 0, 20)
-ExecIcon.Image = "rbxassetid://7072719379" -- Ikon Play/Start Modern
-ExecIcon.ZIndex = 4
+ExecStroke.Color = Color3.fromRGB(255, 255, 255)
+ExecStroke.Thickness = 1 -- Dibuat tipis rapi agar tidak nge-blur/menumpuk
 
 
 -- CONTAINER TOMBOL SEJAJAR (Discord & Donate)
@@ -131,7 +122,7 @@ RowContainer.Size = UDim2.new(0, 280, 0, 42)
 RowContainer.ZIndex = 3
 
 -- Fungsi Pembuat Tombol Sejajar (Horizontal)
-local function createHorizontalButton(name, text, iconId, xPos)
+local function createHorizontalButton(name, text, xPos)
     local btn = Instance.new("TextButton")
     btn.Name = name
     btn.Parent = RowContainer
@@ -139,7 +130,7 @@ local function createHorizontalButton(name, text, iconId, xPos)
     btn.Position = UDim2.new(0, xPos, 0, 0)
     btn.Size = UDim2.new(0, 133, 0, 42)
     btn.Font = Enum.Font.GothamBold
-    btn.Text = "   " .. text
+    btn.Text = text
     btn.TextColor3 = Color3.fromRGB(255, 255, 255)
     btn.TextSize = 12
     btn.AutoButtonColor = false
@@ -151,16 +142,8 @@ local function createHorizontalButton(name, text, iconId, xPos)
 
     local stroke = Instance.new("UIStroke")
     stroke.Parent = btn
-    stroke.Color = Color3.fromRGB(200, 25, 25)
-    stroke.Thickness = 1.5
-
-    local icon = Instance.new("ImageLabel")
-    icon.Parent = btn
-    icon.BackgroundTransparency = 1
-    icon.Position = UDim2.new(0, 10, 0.5, -9)
-    icon.Size = UDim2.new(0, 18, 0, 18)
-    icon.Image = iconId
-    icon.ZIndex = 4
+    stroke.Color = Color3.fromRGB(255, 255, 255)
+    stroke.Thickness = 1
 
     -- Animasi Tombol
     btn.MouseButton1Down:Connect(function()
@@ -176,11 +159,9 @@ local function createHorizontalButton(name, text, iconId, xPos)
     return btn
 end
 
--- Tombol Discord & Donate berdampingan dengan ikon yang jauh lebih bagus & rapi
--- Discord Icon: rbxassetid://7072720173 (Chat/Community)
--- Donate Icon: rbxassetid://7072718730 (Gift/Donation)
-local DiscordBtn = createHorizontalButton("DiscordBtn", "Discord", "rbxassetid://7072720173", 0)
-local DonateBtn = createHorizontalButton("DonateBtn", "Donate", "rbxassetid://7072718730", 147)
+-- Tombol Discord & Donate berdampingan secara horizontal
+local DiscordBtn = createHorizontalButton("DiscordBtn", "💬  Discord", 0)
+local DonateBtn = createHorizontalButton("DonateBtn", "🎁  Donate", 147)
 
 
 -- Animasi klik Execute
@@ -285,9 +266,9 @@ end)
 DiscordBtn.MouseButton1Click:Connect(function()
     if setclipboard then
         setclipboard("https://discord.gg/linkdiscordmu")
-        DiscordBtn.Text = "   Copied!"
+        DiscordBtn.Text = "💬  Copied!"
         task.wait(1.5)
-        DiscordBtn.Text = "   Discord"
+        DiscordBtn.Text = "💬  Discord"
     end
 end)
 
