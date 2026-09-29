@@ -1,5 +1,5 @@
 -- =================================================================
--- Grudins Hub - Ultimate Loader with Game Detection & Universal Support
+-- Grudins Hub - Ultimate Loader (Connected to GitHub)
 -- =================================================================
 
 local CoreGui = game:GetService("CoreGui")
@@ -15,16 +15,15 @@ if CoreGui:FindFirstChild("GrudinsHubLoader") then
 end
 
 -- =================================================================
--- KONFIGURASI LINK SCRIPT GAME (Ganti URL dengan raw link GitHub kamu)
+-- KONFIGURASI LINK SCRIPT GAME & UNIVERSAL (RAW GITHUB)
 -- =================================================================
 local SupportedGames = {
-    -- Format: [PlaceId] = "Link_Raw_Script_Game_Kamu.lua"
-    [2753915549] = "https://raw.githubusercontent.com/username/namarepo/main/games/bloxfruits.lua", -- Contoh Blox Fruits
-    [142823291]  = "https://raw.githubusercontent.com/username/namarepo/main/games/dahood.lua",      -- Contoh Da Hood
+    -- Format: [PlaceId] = "Link_Raw_Script_Khusus.lua"
+    -- Contoh game tertentu bisa dimasukkan di sini jika sudah ada
 }
 
--- Link Script Universal (Jika game tidak ada di dalam daftar SupportedGames di atas)
-local UniversalScriptUrl = "https://raw.githubusercontent.com/username/namarepo/main/universal.lua"
+-- Link Raw Universal Script yang tersimpan di repository kamu
+local UniversalScriptUrl = "https://raw.githubusercontent.com/yumetrader63-droid/GrudinsHub/main/universal.lua"
 
 -- Asset ID Utama
 local HubBgUrl = "rbxassetid://76695249700487"
@@ -103,7 +102,7 @@ WelcomeText.TextColor3 = Color3.fromRGB(200, 200, 200)
 WelcomeText.TextSize = 13
 WelcomeText.ZIndex = 2
 
--- Tombol EXECUTE (Teks Putih Bersih, Border Putih Rapi)
+-- Tombol EXECUTE
 local ExecuteBtn = Instance.new("TextButton")
 ExecuteBtn.Name = "ExecuteBtn"
 ExecuteBtn.Parent = CenterContainer
@@ -261,14 +260,12 @@ ModeStatusText.ZIndex = 21
 -- SISTEM LOGIKA EXECUTE & PENGECEKAN GAME OTOMATIS
 -- =================================================================
 ExecuteBtn.MouseButton1Click:Connect(function()
-    -- Hilangkan background utama dan tampilkan pop-up loading
     FullscreenBg:Destroy()
     LoadingPopup.Visible = true
 
     local targetScriptUrl = nil
     local gameName = "Roblox Game"
 
-    -- Ambil informasi nama game via MarketplaceService
     local success, gameInfo = pcall(function()
         return MarketplaceService:GetProductInfo(game.PlaceId)
     end)
@@ -292,28 +289,25 @@ ExecuteBtn.MouseButton1Click:Connect(function()
         end
     end)
 
-    -- Proses Pengecekan Game di Daftar Supported Games
-    task.wait(1.2) -- Jeda sebentar untuk efek loading yang mulus
+    task.wait(1.2)
 
+    -- Pengecekan Game di Daftar Supported Games
     if SupportedGames[game.PlaceId] then
-        -- Jika game terdaftar di Supported Games
         targetScriptUrl = SupportedGames[game.PlaceId]
-        ModeStatusText.TextColor3 = Color3.fromRGB(50, 255, 100) -- Hijau
+        ModeStatusText.TextColor3 = Color3.fromRGB(50, 255, 100)
         ModeStatusText.Text = "[ Status: Supported Game Script ]"
     else
-        -- Jika tidak terdaftar, arahkan ke Universal Script
+        -- Jika tidak terdaftar, arahkan ke Universal Script GitHub
         targetScriptUrl = UniversalScriptUrl
-        ModeStatusText.TextColor3 = Color3.fromRGB(255, 170, 50) -- Kuning/Orange
+        ModeStatusText.TextColor3 = Color3.fromRGB(255, 170, 50)
         ModeStatusText.Text = "[ Status: Universal Script Mode ]"
     end
 
     task.wait(1.5)
     isLoaded = true
-
-    -- Tutup pop-up loading
     LoadingPopup:Destroy()
 
-    -- Eksekusi script yang sesuai (Game spesifik atau Universal)
+    -- Eksekusi Script via HttpGet
     if targetScriptUrl then
         local loadSuccess, err = pcall(function()
             loadstring(game:HttpGet(targetScriptUrl))()
