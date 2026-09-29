@@ -1,44 +1,77 @@
 -- =================================================================
--- Grudins Hub - Universal Script (Advanced Fly, Aimbot & Dual ESP)
+-- GRUDINS HUB V1 - UNIVERSAL (STABLE & BUG-FREE BUILD)
 -- =================================================================
 
-local CoreGui = game:GetService("CoreGui")
-local UserInputService = game:GetService("UserInputService")
-local TweenService = game:GetService("TweenService")
+-- [1] INISIALISASI & PROTEKSI PENGATURAN AWAL
+if not game:IsLoaded() then
+    game.Loaded:Wait()
+end
+
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
-local LocalPlayer = Players.LocalPlayer
+local UserInputService = game:GetService("UserInputService")
+local StarterGui = game:GetService("StarterGui")
 local Camera = workspace.CurrentCamera
 
--- Hapus UI Universal lama jika dijalankan ulang
-if CoreGui:FindFirstChild("GrudinsHubUniversal") then
-    CoreGui.GrudinsHubUniversal:Destroy()
+local LocalPlayer = Players.LocalPlayer
+while not LocalPlayer do
+    task.wait(0.1)
+    LocalPlayer = Players.LocalPlayer
+end
+
+-- [2] SISTEM AMAN PARENT UI (BYPASS EXECUTION ERROR)
+local function GetSafeParent()
+    local parent = nil
+    if gethui then
+        pcall(function() parent = gethui() end)
+    end
+    if not parent then
+        pcall(function() parent = game:GetService("CoreGui") end)
+    end
+    if not parent then
+        pcall(function() parent = LocalPlayer:WaitForChild("PlayerGui", 5) end)
+    end
+    return parent or LocalPlayer:FindFirstChildOfClass("PlayerGui")
+end
+
+local TargetParent = GetSafeParent()
+if not TargetParent then return end
+
+-- Bersihkan UI V1 lama jika ada
+if TargetParent:FindFirstChild("GrudinsHubV1") then
+    TargetParent.GrudinsHubV1:Destroy()
 end
 
 local HubLogoUrl = "rbxassetid://134447790437387"
 
--- ScreenGui Utama
+-- Container ScreenGui Utama
 local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "GrudinsHubUniversal"
+ScreenGui.Name = "GrudinsHubV1"
 ScreenGui.ResetOnSpawn = false
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+ScreenGui.Parent = TargetParent
 
-local successUI = pcall(function()
-    ScreenGui.Parent = CoreGui
+-- Notifikasi sukses terload
+task.spawn(function()
+    pcall(function()
+        StarterGui:SetCore("SendNotification", {
+            Title = "Grudins Hub V1",
+            Text = "Script V1 Berhasil Terload!",
+            Duration = 3,
+            Icon = HubLogoUrl
+        })
+    end)
 end)
-if not successUI then
-    ScreenGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
-end
 
 -- =================================================================
--- 1. MAIN WINDOW (TAMPILAN UTAMA / EXPANDED)
+-- [3] TAMPILAN UTAMA (MAIN FRAME)
 -- =================================================================
 local MainFrame = Instance.new("Frame")
 MainFrame.Name = "MainFrame"
 MainFrame.Parent = ScreenGui
 MainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
 MainFrame.Position = UDim2.new(0.5, -190, 0.5, -180)
-MainFrame.Size = UDim2.new(0, 380, 0, 360)
+MainFrame.Size = UDim2.new(0, 380, 0, 370)
 MainFrame.Visible = true
 MainFrame.ZIndex = 10
 
@@ -51,7 +84,7 @@ MainStroke.Parent = MainFrame
 MainStroke.Color = Color3.fromRGB(255, 50, 50)
 MainStroke.Thickness = 1.5
 
--- TopBar (Area Dragging)
+-- Header TopBar
 local TopBar = Instance.new("Frame")
 TopBar.Name = "TopBar"
 TopBar.Parent = MainFrame
@@ -71,12 +104,12 @@ LogoIcon.ZIndex = 12
 local Title = Instance.new("TextLabel")
 Title.Parent = TopBar
 Title.BackgroundTransparency = 1
-Title.Position = UDim2.new(0, 50, 0, 10)
+Title.Position = UDim2.new(0, 48, 0, 10)
 Title.Size = UDim2.new(0, 200, 0, 25)
 Title.Font = Enum.Font.GothamBold
-Title.Text = "GRUDINS HUB : UNIVERSAL"
+Title.Text = "GRUDINS HUB : UNIVERSAL V1"
 Title.TextColor3 = Color3.fromRGB(255, 50, 50)
-Title.TextSize = 13
+Title.TextSize = 12
 Title.TextXAlignment = Enum.TextXAlignment.Left
 Title.ZIndex = 12
 
@@ -120,41 +153,44 @@ Divider.Position = UDim2.new(0, 15, 0, 45)
 Divider.Size = UDim2.new(1, -30, 0, 1)
 Divider.ZIndex = 11
 
--- Tombol "List Game Support"
+-- Tombol Lihat List Game Support
 local GameListBtn = Instance.new("TextButton")
 GameListBtn.Parent = MainFrame
 GameListBtn.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-GameListBtn.Position = UDim2.new(0, 15, 0, 55)
-GameListBtn.Size = UDim2.new(1, -30, 0, 32)
+GameListBtn.Position = UDim2.new(0, 15, 0, 52)
+GameListBtn.Size = UDim2.new(1, -30, 0, 30)
 GameListBtn.Font = Enum.Font.GothamBold
 GameListBtn.Text = "🎮  Lihat List Game Support"
 GameListBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-GameListBtn.TextSize = 12
+GameListBtn.TextSize = 11
 GameListBtn.ZIndex = 11
 
 local GLBtnCorner = Instance.new("UICorner")
 GLBtnCorner.CornerRadius = UDim.new(0, 6)
 GLBtnCorner.Parent = GameListBtn
 
--- Scrolling Container Fitur Cheat
+-- Container Scroll Area
 local ContentContainer = Instance.new("ScrollingFrame")
 ContentContainer.Parent = MainFrame
 ContentContainer.BackgroundTransparency = 1
-ContentContainer.Position = UDim2.new(0, 15, 0, 95)
-ContentContainer.Size = UDim2.new(1, -30, 1, -105)
-ContentContainer.CanvasSize = UDim2.new(0, 0, 0, 380)
+ContentContainer.Position = UDim2.new(0, 15, 0, 90)
+ContentContainer.Size = UDim2.new(1, -30, 1, -100)
+ContentContainer.CanvasSize = UDim2.new(0, 0, 0, 460)
 ContentContainer.ScrollBarThickness = 4
+ContentContainer.ScrollBarImageColor3 = Color3.fromRGB(255, 50, 50)
 ContentContainer.ZIndex = 11
 
 local UIListLayout = Instance.new("UIListLayout")
 UIListLayout.Parent = ContentContainer
 UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-UIListLayout.Padding = UDim.new(0, 10)
+UIListLayout.Padding = UDim.new(0, 8)
 
--- Fungsi Toggle Builder
+-- =================================================================
+-- [4] GENERATOR ELEMEN TOGGLE & SLIDER
+-- =================================================================
 local function createToggleFeature(name, defaultState, callback)
     local frame = Instance.new("Frame")
-    frame.Size = UDim2.new(1, 0, 0, 40)
+    frame.Size = UDim2.new(1, 0, 0, 36)
     frame.BackgroundTransparency = 1
     frame.ZIndex = 11
 
@@ -173,7 +209,7 @@ local function createToggleFeature(name, defaultState, callback)
     btn.Parent = frame
     btn.AnchorPoint = Vector2.new(1, 0.5)
     btn.Position = UDim2.new(1, 0, 0.5, 0)
-    btn.Size = UDim2.new(0, 70, 0, 28)
+    btn.Size = UDim2.new(0, 65, 0, 26)
     btn.BackgroundColor3 = defaultState and Color3.fromRGB(50, 200, 50) or Color3.fromRGB(50, 50, 50)
     btn.Font = Enum.Font.GothamBold
     btn.Text = defaultState and "ON" or "OFF"
@@ -196,29 +232,28 @@ local function createToggleFeature(name, defaultState, callback)
     frame.Parent = ContentContainer
 end
 
--- Fungsi Slider Builder (Speed)
 local function createSliderFeature(name, min, max, defaultVal, callback)
     local frame = Instance.new("Frame")
-    frame.Size = UDim2.new(1, 0, 0, 55)
+    frame.Size = UDim2.new(1, 0, 0, 50)
     frame.BackgroundTransparency = 1
     frame.ZIndex = 11
 
     local label = Instance.new("TextLabel")
     label.Parent = frame
     label.BackgroundTransparency = 1
-    label.Size = UDim2.new(1, 0, 0, 20)
+    label.Size = UDim2.new(1, 0, 0, 18)
     label.Font = Enum.Font.GothamMedium
     label.Text = name .. ": " .. defaultVal .. "x"
     label.TextColor3 = Color3.fromRGB(230, 230, 230)
-    label.TextSize = 12
+    label.TextSize = 11
     label.TextXAlignment = Enum.TextXAlignment.Left
     label.ZIndex = 11
 
     local sliderBg = Instance.new("Frame")
     sliderBg.Parent = frame
     sliderBg.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-    sliderBg.Position = UDim2.new(0, 0, 0, 30)
-    sliderBg.Size = UDim2.new(1, 0, 0, 12)
+    sliderBg.Position = UDim2.new(0, 0, 0, 24)
+    sliderBg.Size = UDim2.new(1, 0, 0, 10)
     sliderBg.ZIndex = 11
 
     local sCorner = Instance.new("UICorner")
@@ -261,94 +296,197 @@ local function createSliderFeature(name, min, max, defaultVal, callback)
     frame.Parent = ContentContainer
 end
 
-
--- =================================================================
--- LOGIKA CHEAT LANJUTAN (Fly Kamera/Analog, Aimbot, ESP Body & Line, Wallhack)
--- =================================================================
-
+-- State System Variables
 local flyEnabled = false
 local aimbotEnabled = false
 local espBodyEnabled = false
 local espLineEnabled = false
 local wallhackEnabled = false
+
 local currentSpeed = 1
+local currentFlySpeed = 1
 
--- Tabel untuk menyimpan garis ESP Line (Drawing API)
-local espLines = {}
+local flyUpPressed = false
+local flyDownPressed = false
 
--- 1. Fly Script (Mengikuti Arah Kamera & Tombol/Analog W,A,S,D)
+local ESPLineFolder = Instance.new("Folder")
+ESPLineFolder.Name = "GrudinsESPLineFolder"
+ESPLineFolder.Parent = ScreenGui
+
+-- Mobile Fly Control Panel (Tombol UP / DOWN Melayang)
+local FlyControlFrame = Instance.new("Frame")
+FlyControlFrame.Name = "FlyControlFrame"
+FlyControlFrame.Parent = ScreenGui
+FlyControlFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+FlyControlFrame.Position = UDim2.new(0.85, -50, 0.5, -50)
+FlyControlFrame.Size = UDim2.new(0, 60, 0, 110)
+FlyControlFrame.Visible = false
+FlyControlFrame.ZIndex = 20
+
+local FCFrameCorner = Instance.new("UICorner")
+FCFrameCorner.CornerRadius = UDim.new(0, 10)
+FCFrameCorner.Parent = FlyControlFrame
+
+local FCFrameStroke = Instance.new("UIStroke")
+FCFrameStroke.Parent = FlyControlFrame
+FCFrameStroke.Color = Color3.fromRGB(255, 50, 50)
+FCFrameStroke.Thickness = 1.5
+
+local UpBtn = Instance.new("TextButton")
+UpBtn.Parent = FlyControlFrame
+UpBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+UpBtn.Position = UDim2.new(0, 5, 0, 5)
+UpBtn.Size = UDim2.new(0, 50, 0, 45)
+UpBtn.Font = Enum.Font.GothamBold
+UpBtn.Text = "⬆\nUP"
+UpBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+UpBtn.TextSize = 11
+UpBtn.ZIndex = 21
+
+local UpCorner = Instance.new("UICorner")
+UpCorner.CornerRadius = UDim.new(0, 6)
+UpCorner.Parent = UpBtn
+
+local DownBtn = Instance.new("TextButton")
+DownBtn.Parent = FlyControlFrame
+DownBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+DownBtn.Position = UDim2.new(0, 5, 0, 60)
+DownBtn.Size = UDim2.new(0, 50, 0, 45)
+DownBtn.Font = Enum.Font.GothamBold
+DownBtn.Text = "⬇\nDOWN"
+DownDownTextColor = Color3.fromRGB(255, 255, 255)
+DownBtn.TextSize = 11
+DownBtn.ZIndex = 21
+
+local DownCorner = Instance.new("UICorner")
+DownCorner.CornerRadius = UDim.new(0, 6)
+DownCorner.Parent = DownBtn
+
+UpBtn.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        flyUpPressed = true
+    end
+end)
+UpBtn.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        flyUpPressed = false
+    end
+end)
+
+DownBtn.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        flyDownPressed = true
+    end
+end)
+DownBtn.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        flyDownPressed = false
+    end
+end)
+
+-- =================================================================
+-- [5] LOGIKA ENGINE UTAMA (100% PERBAIKAN DIRECTION ANALOG & ESP)
+-- =================================================================
+
+-- 1. Precision Fly (Analog Fix & Kamera 3D Matrix)
 RunService.RenderStepped:Connect(function()
     local char = LocalPlayer.Character
-    if flyEnabled and char and char:FindFirstChild("HumanoidRootPart") and char:FindFirstChild("Humanoid") then
-        local hrp = char.HumanoidRootPart
-        local hum = char.Humanoid
+    if flyEnabled and char then
+        local hrp = char:FindFirstChild("HumanoidRootPart")
+        local hum = char:FindFirstChild("Humanoid")
         
-        hum.PlatformStand = true -- Bebas gravitasi
-        local camCF = Camera.CFrame
-        local moveDir = hum.MoveDirection
-        
-        if moveDir.Magnitude > 0 then
-            hrp.Velocity = camCF.LookVector * (moveDir.Z * -50 * currentSpeed) + camCF.RightVector * (moveDir.X * 50 * currentSpeed) + Vector3.new(0, moveDir.Y * 50, 0)
-        else
-            hrp.Velocity = Vector3.new(0, 0.1, 0) -- Melayang diam jika tidak digerakkan
+        if hrp and hum then
+            hum.PlatformStand = true
+
+            local camCF = Camera.CFrame
+            local moveDir = hum.MoveDirection
+
+            local verticalSpeed = 0
+            if flyUpPressed then
+                verticalSpeed = 30 * currentFlySpeed
+            elseif flyDownPressed then
+                verticalSpeed = -30 * currentFlySpeed
+            end
+
+            if moveDir.Magnitude > 0 then
+                -- Konversi MoveDirection ke Local Object Space Kamera
+                local localMove = camCF:VectorToObjectSpace(moveDir)
+                
+                -- Kalkulasi Vektor Maju/Mundur & Kiri/Kanan Presisi
+                local targetDir = (camCF.LookVector * (-localMove.Z)) + (camCF.RightVector * localMove.X)
+                if targetDir.Magnitude > 0 then
+                    targetDir = targetDir.Unit * (35 * currentFlySpeed)
+                    hrp.AssemblyLinearVelocity = Vector3.new(targetDir.X, targetDir.Y + verticalSpeed, targetDir.Z)
+                else
+                    hrp.AssemblyLinearVelocity = Vector3.new(0, verticalSpeed, 0)
+                end
+            else
+                hrp.AssemblyLinearVelocity = Vector3.new(0, verticalSpeed ~= 0 and verticalSpeed or 0.5, 0)
+            end
         end
-    elseif char and char:FindFirstChild("Humanoid") then
+    elseif char and char:FindFirstChild("Humanoid") and not flyEnabled then
         char.Humanoid.PlatformStand = false
     end
 end)
 
--- 2. Speed Slider Script
+-- 2. WalkSpeed Engine
 RunService.Stepped:Connect(function()
-    local char = LocalPlayer.Character
-    if char and char:FindFirstChild("Humanoid") then
-        char.Humanoid.WalkSpeed = 16 * currentSpeed
-    end
+    pcall(function()
+        local char = LocalPlayer.Character
+        if char and char:FindFirstChild("Humanoid") then
+            char.Humanoid.WalkSpeed = 16 * currentSpeed
+        end
+    end)
 end)
 
--- 3. Aimbot Script (Kamera Lengket ke Player Terdekat)
+-- 3. Aimbot Lock System
 RunService.RenderStepped:Connect(function()
-    if aimbotEnabled then
-        local nearestPlayer = nil
+    if aimbotEnabled and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+        local nearestHead = nil
         local shortestDist = math.huge
-        
+        local myPos = LocalPlayer.Character.HumanoidRootPart.Position
+
         for _, player in ipairs(Players:GetPlayers()) do
-            if player ~= LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-                local hrp = player.Character.HumanoidRootPart
-                local dist = (hrp.Position - LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
-                if dist < shortestDist then
-                    shortestDist = dist
-                    nearestPlayer = player
+            if player ~= LocalPlayer and player.Character then
+                local pChar = player.Character
+                local head = pChar:FindFirstChild("Head")
+                local hum = pChar:FindFirstChild("Humanoid")
+
+                if head and hum and hum.Health > 0 then
+                    local dist = (head.Position - myPos).Magnitude
+                    if dist < shortestDist then
+                        shortestDist = dist
+                        nearestHead = head
+                    end
                 end
             end
         end
-        
-        if nearestPlayer and nearestPlayer.Character and nearestPlayer.Character:FindFirstChild("Head") then
-            local targetPos = nearestPlayer.Character.Head.Position
-            Camera.CFrame = CFrame.new(Camera.CFrame.Position, targetPos)
+
+        if nearestHead then
+            Camera.CFrame = CFrame.new(Camera.CFrame.Position, nearestHead.Position)
         end
     end
 end)
 
--- 4. ESP Body (Highlight) & ESP Line (Garis Putih ke Player)
+-- 4. ESP Body & ESP Line System
 RunService.RenderStepped:Connect(function()
-    -- Hapus garis lama
-    for _, line in pairs(espLines) do
-        line:Remove()
-    end
-    espLines = {}
+    ESPLineFolder:ClearAllChildren()
 
     for _, player in ipairs(Players:GetPlayers()) do
-        if player ~= LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+        if player ~= LocalPlayer and player.Character then
             local char = player.Character
-            
-            -- ESP Body (Highlight Merah)
+
+            -- ESP Body Highlight Red
             if espBodyEnabled then
-                if not char:FindFirstChild("GrudinsESPBody") then
-                    local hl = Instance.new("Highlight")
+                local hl = char:FindFirstChild("GrudinsESPBody")
+                if not hl then
+                    hl = Instance.new("Highlight")
                     hl.Name = "GrudinsESPBody"
-                    hl.Parent = char
                     hl.FillColor = Color3.fromRGB(255, 50, 50)
+                    hl.FillTransparency = 0.4
                     hl.OutlineColor = Color3.fromRGB(255, 255, 255)
+                    hl.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+                    hl.Parent = char
                 end
             else
                 if char:FindFirstChild("GrudinsESPBody") then
@@ -356,49 +494,63 @@ RunService.RenderStepped:Connect(function()
                 end
             end
 
-            -- ESP Line (Garis Putih)
-            if espLineEnabled then
+            -- ESP Line Tracer Garis Putih
+            if espLineEnabled and char:FindFirstChild("HumanoidRootPart") then
                 local hrp = char.HumanoidRootPart
                 local vector, onScreen = Camera:WorldToViewportPoint(hrp.Position)
+                
                 if onScreen then
-                    local line = Drawing.new("Line")
-                    line.Visible = true
-                    line.From = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y) -- Dari bawah tengah layar
-                    line.To = Vector2.new(vector.X, vector.Y)
-                    line.Color = Color3.fromRGB(255, 255, 255) -- Garis Putih
-                    line.Thickness = 1.5
-                    table.insert(espLines, line)
+                    local startPos = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y)
+                    local targetPos = Vector2.new(vector.X, vector.Y)
+                    local diff = targetPos - startPos
+                    local distance = diff.Magnitude
+                    local angle = math.atan2(diff.Y, diff.X)
+
+                    local lineFrame = Instance.new("Frame")
+                    lineFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+                    lineFrame.BorderSizePixel = 0
+                    lineFrame.ZIndex = 5
+                    lineFrame.Size = UDim2.new(0, distance, 0, 1.5)
+                    lineFrame.Position = UDim2.new(0, startPos.X, 0, startPos.Y)
+                    lineFrame.AnchorPoint = Vector2.new(0, 0.5)
+                    lineFrame.Rotation = math.deg(angle)
+                    lineFrame.Parent = ESPLineFolder
                 end
             end
         end
     end
 end)
 
--- 5. Wallhack Script
+-- 5. Wallhack System
 RunService.RenderStepped:Connect(function()
-    for _, player in ipairs(Players:GetPlayers()) do
-        if player ~= LocalPlayer and player.Character then
-            for _, part in ipairs(player.Character:GetDescendants()) do
-                if part:IsA("BasePart") then
-                    part.Transparency = wallhackEnabled and 0.5 or 0
+    if wallhackEnabled then
+        for _, player in ipairs(Players:GetPlayers()) do
+            if player ~= LocalPlayer and player.Character then
+                for _, part in ipairs(player.Character:GetDescendants()) do
+                    if part:IsA("BasePart") then
+                        part.Transparency = 0.5
+                    end
                 end
             end
         end
     end
 end)
 
-
--- Masukkan Fitur ke Menu Utama
-createToggleFeature("✈️ Fly (Kamera & Analog)", false, function(state) flyEnabled = state end)
-createToggleFeature("🎯 Aimbot (Kamera Lengket)", false, function(state) aimbotEnabled = state end)
+-- Pendaftaran Fitur
+createToggleFeature("✈️ Fly (Analog Fix)", false, function(state) 
+    flyEnabled = state 
+    FlyControlFrame.Visible = state
+end)
+createToggleFeature("🎯 Aimbot (Camera Lock)", false, function(state) aimbotEnabled = state end)
 createToggleFeature("👀 ESP Body (Highlight)", false, function(state) espBodyEnabled = state end)
 createToggleFeature("📏 ESP Line (Garis Putih)", false, function(state) espLineEnabled = state end)
 createToggleFeature("🧱 Wallhack", false, function(state) wallhackEnabled = state end)
-createSliderFeature("⚡ Speed", 1, 10, 1, function(val) currentSpeed = val end)
 
+createSliderFeature("⚡ Speed Jalan", 1, 10, 1, function(val) currentSpeed = val end)
+createSliderFeature("🚀 Fly Speed", 1, 10, 1, function(val) currentFlySpeed = val end)
 
 -- =================================================================
--- 2. POP-UP LIST GAME SUPPORT
+-- [6] POPUP LIST GAME SUPPORT
 -- =================================================================
 local GameListPopup = Instance.new("Frame")
 GameListPopup.Name = "GameListPopup"
@@ -406,152 +558,4 @@ GameListPopup.Parent = ScreenGui
 GameListPopup.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 GameListPopup.Position = UDim2.new(0.5, 0, 0.5, 0)
 GameListPopup.Size = UDim2.new(0, 320, 0, 360)
-GameListPopup.AnchorPoint = Vector2.new(0.5, 0.5)
-GameListPopup.Visible = false
-GameListPopup.ZIndex = 40
-
-local PopupCorner = Instance.new("UICorner")
-PopupCorner.CornerRadius = UDim.new(0, 12)
-PopupCorner.Parent = GameListPopup
-
-local PopupStroke = Instance.new("UIStroke")
-PopupStroke.Parent = GameListPopup
-PopupStroke.Color = Color3.fromRGB(255, 50, 50)
-PopupStroke.Thickness = 2
-
-local PopupTopBar = Instance.new("Frame")
-PopupTopBar.Parent = GameListPopup
-PopupTopBar.BackgroundTransparency = 1
-PopupTopBar.Size = UDim2.new(1, 0, 0, 45)
-PopupTopBar.ZIndex = 41
-
-local PopupTitle = Instance.new("TextLabel")
-PopupTitle.Parent = PopupTopBar
-PopupTitle.BackgroundTransparency = 1
-PopupTitle.Position = UDim2.new(0, 15, 0, 10)
-PopupTitle.Size = UDim2.new(0, 250, 0, 25)
-PopupTitle.Font = Enum.Font.GothamBold
-PopupTitle.Text = "🎮 SUPPORTED GAMES LIST"
-PopupTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
-PopupTitle.TextSize = 13
-PopupTitle.TextXAlignment = Enum.TextXAlignment.Left
-PopupTitle.ZIndex = 42
-
-local PopupCloseBtn = Instance.new("TextButton")
-PopupCloseBtn.Parent = PopupTopBar
-PopupCloseBtn.BackgroundColor3 = Color3.fromRGB(200, 30, 30)
-PopupCloseBtn.Position = UDim2.new(1, -35, 0, 12)
-PopupCloseBtn.Size = UDim2.new(0, 22, 0, 22)
-PopupCloseBtn.Font = Enum.Font.GothamBold
-PopupCloseBtn.Text = "X"
-PopupCloseBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-PopupCloseBtn.TextSize = 11
-PopupCloseBtn.ZIndex = 42
-
-local PCorner = Instance.new("UICorner")
-PCorner.CornerRadius = UDim.new(0, 6)
-PCorner.Parent = PopupCloseBtn
-
-local GameScroll = Instance.new("ScrollingFrame")
-GameScroll.Parent = GameListPopup
-GameScroll.BackgroundTransparency = 1
-GameScroll.Position = UDim2.new(0, 15, 0, 55)
-GameScroll.Size = UDim2.new(1, -30, 1, -65)
-GameScroll.CanvasSize = UDim2.new(0, 0, 0, 360)
-GameScroll.ScrollBarThickness = 4
-GameScroll.ZIndex = 41
-
-local GLayout = Instance.new("UIListLayout")
-GLayout.Parent = GameScroll
-GLayout.SortOrder = Enum.SortOrder.LayoutOrder
-GLayout.Padding = UDim.new(0, 10)
-
-local function addGameItem(gameName, statusText, assetId)
-    local item = Instance.new("Frame")
-    item.Size = UDim2.new(1, 0, 0, 75)
-    item.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-    item.ZIndex = 41
-
-    local iCorner = Instance.new("UICorner")
-    iCorner.CornerRadius = UDim.new(0, 8)
-    iCorner.Parent = item
-
-    local icon = Instance.new("ImageLabel")
-    icon.Parent = item
-    icon.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    icon.Position = UDim2.new(0, 10, 0, 10)
-    icon.Size = UDim2.new(0, 55, 0, 55)
-    icon.Image = assetId
-    icon.ScaleType = Enum.ScaleType.Crop
-    icon.ZIndex = 42
-
-    local iconCorner = Instance.new("UICorner")
-    iconCorner.CornerRadius = UDim.new(0, 6)
-    iconCorner.Parent = icon
-
-    local nameLbl = Instance.new("TextLabel")
-    nameLbl.Parent = item
-    nameLbl.BackgroundTransparency = 1
-    nameLbl.Position = UDim2.new(0, 75, 0, 12)
-    nameLbl.Size = UDim2.new(1, -85, 0, 20)
-    nameLbl.Font = Enum.Font.GothamBold
-    nameLbl.Text = gameName
-    nameLbl.TextColor3 = Color3.fromRGB(255, 255, 255)
-    nameLbl.TextSize = 13
-    nameLbl.TextXAlignment = Enum.TextXAlignment.Left
-    nameLbl.ZIndex = 42
-
-    local statusLbl = Instance.new("TextLabel")
-    statusLbl.Parent = item
-    statusLbl.BackgroundTransparency = 1
-    statusLbl.Position = UDim2.new(0, 75, 0, 35)
-    statusLbl.Size = UDim2.new(1, -85, 0, 20)
-    statusLbl.Font = Enum.Font.GothamMedium
-    statusLbl.Text = statusText
-    statusLbl.TextColor3 = Color3.fromRGB(100, 255, 100)
-    statusLbl.TextSize = 11
-    statusLbl.TextXAlignment = Enum.TextXAlignment.Left
-    statusLbl.ZIndex = 42
-
-    item.Parent = GameScroll
-end
-
-addGameItem("Steal an Egg", "Status: Fully Supported", "rbxassetid://6023426915")
-addGameItem("Blox Fruits", "Status: Universal & Bypass", "rbxassetid://6023426915")
-addGameItem("Duels", "Status: Silent Aim & ESP Ready", "rbxassetid://6023426915")
-addGameItem("Murderers vs Sheriff", "Status: ESP Roles Active", "rbxassetid://6023426915")
-
-GameListBtn.MouseButton1Click:Connect(function()
-    GameListPopup.Visible = true
-end)
-
-PopupCloseBtn.MouseButton1Click:Connect(function()
-    GameListPopup.Visible = false
-end)
-
-
--- =================================================================
--- 3. MINIMIZED ICON (LINGKARAN MELAYANG)
--- =================================================================
-local MinimizedIcon = Instance.new("ImageButton")
-MinimizedIcon.Name = "MinimizedIcon"
-MinimizedIcon.Parent = ScreenGui
-MinimizedIcon.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
-MinimizedIcon.Position = UDim2.new(0.05, 0, 0.15, 0)
-MinimizedIcon.Size = UDim2.new(0, 50, 0, 50)
-MinimizedIcon.Visible = false
-MinimizedIcon.AutoButtonColor = false
-MinimizedIcon.ZIndex = 30
-
-local IconCorner = Instance.new("UICorner")
-IconCorner.CornerRadius = UDim.new(1, 0)
-IconCorner.Parent = MinimizedIcon
-
-local IconStroke = Instance.new("UIStroke")
-IconStroke.Parent = MinimizedIcon
-IconStroke.Color = Color3.fromRGB(255, 50, 50)
-IconStroke.Thickness = 2
-
-local IconLogo = Instance.new("ImageLabel")
-IconLogo.Parent = MinimizedIcon
-IconLogo.Backgro
+GameListPopup.Anch
