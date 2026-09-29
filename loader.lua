@@ -1,5 +1,5 @@
 -- =================================================================
--- Grudins Hub Loader (Custom Logo & Custom Background Version)
+-- Grudins Hub Loader (Full Screen Inset Fixed Version)
 -- =================================================================
 
 local CoreGui = game:GetService("CoreGui")
@@ -20,6 +20,8 @@ local HubBgUrl = "rbxassetid://76695249700487"
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "GrudinsHubLoader"
 ScreenGui.ResetOnSpawn = false
+-- BARU: Mengabaikan batas atas (Topbar/Inset) agar background menutup full layar
+ScreenGui.IgnoreGuiInset = true
 
 local successUI = pcall(function()
     ScreenGui.Parent = CoreGui
