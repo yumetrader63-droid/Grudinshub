@@ -1,5 +1,5 @@
 -- =================================================================
--- Grudins Hub Loader (Full Custom Animation & Features Version)
+-- Grudins Hub Loader (Modern Icons Version)
 -- =================================================================
 
 local CoreGui = game:GetService("CoreGui")
@@ -112,13 +112,13 @@ ExecStroke.Parent = ExecuteBtn
 ExecStroke.Color = Color3.fromRGB(200, 25, 25)
 ExecStroke.Thickness = 1.5
 
--- Ikon Roblox di Tombol Execute
+-- Ikon Modern untuk Execute (Ikon Play / Power Elegan)
 local ExecIcon = Instance.new("ImageLabel")
 ExecIcon.Parent = ExecuteBtn
 ExecIcon.BackgroundTransparency = 1
 ExecIcon.Position = UDim2.new(0, 15, 0.5, -10)
 ExecIcon.Size = UDim2.new(0, 20, 0, 20)
-ExecIcon.Image = "rbxassetid://6023426915" -- Ikon Play/Roblox
+ExecIcon.Image = "rbxassetid://7072719379" -- Ikon Play/Start Modern
 ExecIcon.ZIndex = 4
 
 
@@ -176,9 +176,11 @@ local function createHorizontalButton(name, text, iconId, xPos)
     return btn
 end
 
--- Tombol Discord & Donate berdampingan (X: 0 dan X: 147)
-local DiscordBtn = createHorizontalButton("DiscordBtn", "Discord", "rbxassetid://6023426915", 0)
-local DonateBtn = createHorizontalButton("DonateBtn", "Donate", "rbxassetid://6034294868", 147)
+-- Tombol Discord & Donate berdampingan dengan ikon yang jauh lebih bagus & rapi
+-- Discord Icon: rbxassetid://7072720173 (Chat/Community)
+-- Donate Icon: rbxassetid://7072718730 (Gift/Donation)
+local DiscordBtn = createHorizontalButton("DiscordBtn", "Discord", "rbxassetid://7072720173", 0)
+local DonateBtn = createHorizontalButton("DonateBtn", "Donate", "rbxassetid://7072718730", 147)
 
 
 -- Animasi klik Execute
