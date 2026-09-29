@@ -1,5 +1,5 @@
 -- =================================================================
--- Grudins Hub Loader (Fixed Button Text & Clean Version)
+-- Grudins Hub - Ultimate Loader with Game Detection & Universal Support
 -- =================================================================
 
 local CoreGui = game:GetService("CoreGui")
@@ -14,11 +14,25 @@ if CoreGui:FindFirstChild("GrudinsHubLoader") then
     CoreGui.GrudinsHubLoader:Destroy()
 end
 
--- Asset ID
+-- =================================================================
+-- KONFIGURASI LINK SCRIPT GAME (Ganti URL dengan raw link GitHub kamu)
+-- =================================================================
+local SupportedGames = {
+    -- Format: [PlaceId] = "Link_Raw_Script_Game_Kamu.lua"
+    [2753915549] = "https://raw.githubusercontent.com/username/namarepo/main/games/bloxfruits.lua", -- Contoh Blox Fruits
+    [142823291]  = "https://raw.githubusercontent.com/username/namarepo/main/games/dahood.lua",      -- Contoh Da Hood
+}
+
+-- Link Script Universal (Jika game tidak ada di dalam daftar SupportedGames di atas)
+local UniversalScriptUrl = "https://raw.githubusercontent.com/username/namarepo/main/universal.lua"
+
+-- Asset ID Utama
 local HubBgUrl = "rbxassetid://76695249700487"
 local HubLogoUrl = "rbxassetid://134447790437387"
 
--- ScreenGui Utama
+-- =================================================================
+-- PEMBUATAN UI UTAMA (LOADER)
+-- =================================================================
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "GrudinsHubLoader"
 ScreenGui.ResetOnSpawn = false
@@ -89,7 +103,7 @@ WelcomeText.TextColor3 = Color3.fromRGB(200, 200, 200)
 WelcomeText.TextSize = 13
 WelcomeText.ZIndex = 2
 
--- Tombol EXECUTE (Diperbaiki Ukuran Teks & Ketebalan Border agar Jelas Terbaca)
+-- Tombol EXECUTE (Teks Putih Bersih, Border Putih Rapi)
 local ExecuteBtn = Instance.new("TextButton")
 ExecuteBtn.Name = "ExecuteBtn"
 ExecuteBtn.Parent = CenterContainer
@@ -99,7 +113,7 @@ ExecuteBtn.Size = UDim2.new(0, 280, 0, 42)
 ExecuteBtn.Font = Enum.Font.GothamBold
 ExecuteBtn.Text = "EXECUTE"
 ExecuteBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-ExecuteBtn.TextSize = 13 -- Disesuaikan agar pas dan tidak bertumpuk
+ExecuteBtn.TextSize = 13
 ExecuteBtn.AutoButtonColor = false
 ExecuteBtn.ZIndex = 3
 
@@ -110,7 +124,7 @@ ExecCorner.Parent = ExecuteBtn
 local ExecStroke = Instance.new("UIStroke")
 ExecStroke.Parent = ExecuteBtn
 ExecStroke.Color = Color3.fromRGB(255, 255, 255)
-ExecStroke.Thickness = 1 -- Dibuat tipis rapi agar tidak nge-blur/menumpuk
+ExecStroke.Thickness = 1
 
 
 -- CONTAINER TOMBOL SEJAJAR (Discord & Donate)
@@ -145,7 +159,7 @@ local function createHorizontalButton(name, text, xPos)
     stroke.Color = Color3.fromRGB(255, 255, 255)
     stroke.Thickness = 1
 
-    -- Animasi Tombol
+    -- Animasi Interaksi Tombol
     btn.MouseButton1Down:Connect(function()
         TweenService:Create(btn, TweenInfo.new(0.1), {BackgroundColor3 = Color3.fromRGB(40, 40, 40)}):Play()
     end)
@@ -159,12 +173,12 @@ local function createHorizontalButton(name, text, xPos)
     return btn
 end
 
--- Tombol Discord & Donate berdampingan secara horizontal
+-- Tombol Discord & Donate Berdampingan
 local DiscordBtn = createHorizontalButton("DiscordBtn", "💬  Discord", 0)
 local DonateBtn = createHorizontalButton("DonateBtn", "🎁  Donate", 147)
 
 
--- Animasi klik Execute
+-- Animasi Tombol Execute
 ExecuteBtn.MouseButton1Down:Connect(function()
     TweenService:Create(ExecuteBtn, TweenInfo.new(0.1), {BackgroundColor3 = Color3.fromRGB(40, 40, 40)}):Play()
 end)
@@ -173,13 +187,15 @@ ExecuteBtn.MouseButton1Up:Connect(function()
 end)
 
 
--- 2. POP-UP LOADING (Floating Statis, Tidak Bisa Digeser, Ditengah Layar)
+-- =================================================================
+-- POP-UP LOADING (Floating Statis, Ditengah Layar)
+-- =================================================================
 local LoadingPopup = Instance.new("Frame")
 LoadingPopup.Name = "LoadingPopup"
 LoadingPopup.Parent = ScreenGui
 LoadingPopup.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
 LoadingPopup.Position = UDim2.new(0.5, 0, 0.5, 0)
-LoadingPopup.Size = UDim2.new(0, 280, 0, 180)
+LoadingPopup.Size = UDim2.new(0, 280, 0, 190)
 LoadingPopup.AnchorPoint = Vector2.new(0.5, 0.5)
 LoadingPopup.Visible = false
 LoadingPopup.ZIndex = 20
@@ -197,7 +213,7 @@ PopupStroke.Thickness = 2
 local PopupLogo = Instance.new("ImageLabel")
 PopupLogo.Parent = LoadingPopup
 PopupLogo.BackgroundTransparency = 1
-PopupLogo.Position = UDim2.new(0.5, -25, 0, 20)
+PopupLogo.Position = UDim2.new(0.5, -25, 0, 15)
 PopupLogo.Size = UDim2.new(0, 50, 0, 50)
 PopupLogo.Image = HubLogoUrl
 PopupLogo.ScaleType = Enum.ScaleType.Fit
@@ -207,19 +223,19 @@ PopupLogo.ZIndex = 21
 local LoadingText = Instance.new("TextLabel")
 LoadingText.Parent = LoadingPopup
 LoadingText.BackgroundTransparency = 1
-LoadingText.Position = UDim2.new(0, 0, 0, 80)
+LoadingText.Position = UDim2.new(0, 0, 0, 72)
 LoadingText.Size = UDim2.new(1, 0, 0, 25)
 LoadingText.Font = Enum.Font.GothamBold
 LoadingText.Text = "LOADING..."
 LoadingText.TextColor3 = Color3.fromRGB(255, 50, 50)
-LoadingText.TextSize = 16
+LoadingText.TextSize = 15
 LoadingText.ZIndex = 21
 
--- Teks Info Game yang Dimainkan
+-- Teks Info Game & Status Pengecekan
 local GameInfoText = Instance.new("TextLabel")
 GameInfoText.Parent = LoadingPopup
 GameInfoText.BackgroundTransparency = 1
-GameInfoText.Position = UDim2.new(0, 15, 0, 115)
+GameInfoText.Position = UDim2.new(0, 15, 0, 105)
 GameInfoText.Size = UDim2.new(1, -30, 0, 40)
 GameInfoText.Font = Enum.Font.GothamMedium
 GameInfoText.Text = "Mendeteksi game..."
@@ -228,41 +244,91 @@ GameInfoText.TextSize = 11
 GameInfoText.TextWrapped = true
 GameInfoText.ZIndex = 21
 
+-- Label Status Mode (Supported / Universal)
+local ModeStatusText = Instance.new("TextLabel")
+ModeStatusText.Parent = LoadingPopup
+ModeStatusText.BackgroundTransparency = 1
+ModeStatusText.Position = UDim2.new(0, 15, 0, 150)
+ModeStatusText.Size = UDim2.new(1, -30, 0, 20)
+ModeStatusText.Font = Enum.Font.GothamBold
+ModeStatusText.Text = ""
+ModeStatusText.TextColor3 = Color3.fromRGB(100, 255, 100)
+ModeStatusText.TextSize = 11
+ModeStatusText.ZIndex = 21
 
--- FUNGSI KETIKA TOMBOL EXECUTE DIKLIK
+
+-- =================================================================
+-- SISTEM LOGIKA EXECUTE & PENGECEKAN GAME OTOMATIS
+-- =================================================================
 ExecuteBtn.MouseButton1Click:Connect(function()
-    -- Hilangkan background utama dan menu awal
+    -- Hilangkan background utama dan tampilkan pop-up loading
     FullscreenBg:Destroy()
-    
-    -- Tampilkan pop-up loading statis
     LoadingPopup.Visible = true
 
-    -- Ambil nama game secara otomatis via MarketplaceService
-    task.spawn(function()
-        local success, gameInfo = pcall(function()
-            return MarketplaceService:GetProductInfo(game.PlaceId)
-        end)
-        
-        if success and gameInfo and gameInfo.Name then
-            GameInfoText.Text = "Memuat Fitur untuk:\n" .. gameInfo.Name
-        else
-            GameInfoText.Text = "Game ID: " .. tostring(game.PlaceId)
-        end
+    local targetScriptUrl = nil
+    local gameName = "Roblox Game"
+
+    -- Ambil informasi nama game via MarketplaceService
+    local success, gameInfo = pcall(function()
+        return MarketplaceService:GetProductInfo(game.PlaceId)
     end)
+    
+    if success and gameInfo and gameInfo.Name then
+        gameName = gameInfo.Name
+    end
+
+    GameInfoText.Text = "Game: " .. gameName
 
     -- Animasi titik-titik loading bergerak halus
+    local isLoaded = false
     task.spawn(function()
         local dots = {"", ".", "..", "..."}
-        while LoadingPopup.Parent do
+        while not isLoaded do
             for _, d in ipairs(dots) do
+                if not LoadingPopup.Parent then break end
                 LoadingText.Text = "LOADING" .. d
                 task.wait(0.4)
             end
         end
     end)
+
+    -- Proses Pengecekan Game di Daftar Supported Games
+    task.wait(1.2) -- Jeda sebentar untuk efek loading yang mulus
+
+    if SupportedGames[game.PlaceId] then
+        -- Jika game terdaftar di Supported Games
+        targetScriptUrl = SupportedGames[game.PlaceId]
+        ModeStatusText.TextColor3 = Color3.fromRGB(50, 255, 100) -- Hijau
+        ModeStatusText.Text = "[ Status: Supported Game Script ]"
+    else
+        -- Jika tidak terdaftar, arahkan ke Universal Script
+        targetScriptUrl = UniversalScriptUrl
+        ModeStatusText.TextColor3 = Color3.fromRGB(255, 170, 50) -- Kuning/Orange
+        ModeStatusText.Text = "[ Status: Universal Script Mode ]"
+    end
+
+    task.wait(1.5)
+    isLoaded = true
+
+    -- Tutup pop-up loading
+    LoadingPopup:Destroy()
+
+    -- Eksekusi script yang sesuai (Game spesifik atau Universal)
+    if targetScriptUrl then
+        local loadSuccess, err = pcall(function()
+            loadstring(game:HttpGet(targetScriptUrl))()
+        end)
+        
+        if not loadSuccess then
+            warn("[Grudins Hub] Gagal memuat script: " .. tostring(err))
+        end
+    end
 end)
 
--- Tombol Aksi Lainnya
+
+-- =================================================================
+-- FUNGSI TOMBOL LAINNYA (Discord & Donate)
+-- =================================================================
 DiscordBtn.MouseButton1Click:Connect(function()
     if setclipboard then
         setclipboard("https://discord.gg/linkdiscordmu")
